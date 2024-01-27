@@ -1,7 +1,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-public class CameraLogic
+public class CameraLogic : Logic
 {
     public string currentCamera;
     Vector2 mousePos;
@@ -32,12 +32,17 @@ public class CameraLogic
     };
 
 
-    public void Update()
+    public override void Update(float deltaTime, Vector2 mousePos)
     {
-        mousePos = Raylib.GetMousePosition();
-
+        this.mousePos = mousePos;
 
         CheckCameraOverlap();
+    }
+
+
+    public override void Draw()
+    {
+        
     }
 
 

@@ -5,12 +5,17 @@ using Raylib_cs;
 public class GameManager
 {
     bool closed = false;
+    Vector2 mousePos;
 
-    Night currentNight;
-    Player player = new();
-    CameraLogic cameraLogic = new();
 
     List<Texture2D> numbers = new();
+
+    List<Logic> logics = new()
+    {
+        new Player(),
+        new Night(),
+        new CameraLogic()
+    };
 
     Dictionary<string, Room> allRooms = new()
     {
@@ -29,7 +34,6 @@ public class GameManager
 
     List<Animatronic> allAnimatronics = new();
 
-    Night night;
 
 
     public GameManager()
@@ -37,16 +41,17 @@ public class GameManager
         LoadTextures();
         cameraLogic.currentCamera = "MainRoom";
 
-        night = new(allAnimatronics);
+        
     }
 
 
     bool testLight = false;
     public void Update()
     {
-        player.Update();
-        cameraLogic.Update();
-        night.Update(); //TODO Use bool closed for cheking door in night.Update()
+        float deltaTime = Raylib.GetFrameTime();
+        mousePos = Raylib.GetMousePosition();
+        
+        logics.ForEach(l => l.Update(deltaTime, mousePos));
 
 
         if (player.doorOverlap && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
@@ -144,7 +149,7 @@ public class GameManager
 
         if (player.currentState == Player.PlayerState.inOffice) //Draws everyting when the player is in the office
         {
-            DrawOfficeState(closed, allTextures);
+            DrawOfficeState(closed, allTextures); 
             Raylib.DrawTexture(allTextures["CameraBar"], 1920 / 2 + 45, 850, Color.WHITE);
             Raylib.DrawTexture(allTextures["CameraBar"], 1920 / 2 - 815, 850, Color.RED);
 
@@ -170,11 +175,8 @@ public class GameManager
             // Raylib.DrawRectangle(179, 660, 80, 50, Color.PURPLE); //Cam 4
         }
 
-        if(player.currentState == Player.PlayerState.inOffice || player.currentState == Player.PlayerState.inCamera) //WHen player is in cameras and office
-        {
-            Raylib.DrawTexture(numbers[night.firstNumb], 100, 100, Color.WHITE);
-            Raylib.DrawTexture(numbers[night.secoundNumb], 140, 100, Color.WHITE);
-        }
+
+        
 
         Raylib.EndDrawing();
     }

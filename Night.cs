@@ -1,7 +1,8 @@
+using System.Numerics;
 using System.Reflection.Metadata;
 using Raylib_cs;
 
-public class Night
+public class Night : Logic
 {
     //General varibels
     List<Animatronic> allAnimatronics = new();
@@ -14,8 +15,6 @@ public class Night
     //Timer varibels
     float deltaTime;
     float powerTimer;
-    float newTime;
-    float oldTime = (float)Raylib.GetTime();
     float powerTimerMax = 5;
 
     List<bool> playerActions = new() //[0] Door, [1] Right light, [2] Left light, [3] Camera
@@ -28,34 +27,31 @@ public class Night
 
 
 
-    public Night(List<Animatronic> currentAnimatronics)
+    public Night()
     {
-        allAnimatronics = currentAnimatronics;
+        powerTimer = powerTimerMax;
     }
 
 
-    public void Update()
+    public override void Update(float deltaTime, Vector2 mousePos)
     {
-
-        DeltaTime();
+        this.deltaTime = deltaTime; 
         PowerLogic();
     }
 
 
-    void DeltaTime() //Make a timer that uses real seconds
+    public override void Draw()
     {
-        newTime = (float)Raylib.GetTime();
-        deltaTime = newTime - oldTime;
 
-        powerTimer = powerTimerMax - deltaTime;
     }
-
 
     void PowerLogic() // Handels the logic of power percentage
     {
+        powerTimer -= deltaTime;
+
         if (powerTimer <= 0) // Timer for the power
         {
-            powerTimer = 0f;
+            powerTimer = powerTimerMax;
 
             if (secoundNumb == 0)
             {
@@ -68,8 +64,7 @@ public class Night
             }
 
             power--;
-
-            oldTime = (float)Raylib.GetTime();
+            powerTimer = powerTimerMax;
         }
 
         if (power <= 0) // If the power reaches zero, player dies (maybe)
@@ -84,9 +79,6 @@ public class Night
 
     void CheckPowerUsage()
     {
-        foreach (bool action in playerActions)
-        {
-            
-        }
+
     }
 }
