@@ -2,7 +2,7 @@ using System.Numerics;
 using Raylib_cs;
 
 
-public class Player : Logic
+public class Player
 {
     //General variables
     public PlayerState currentState = PlayerState.inOffice;
@@ -11,60 +11,98 @@ public class Player : Logic
     Texture2D phone = Raylib.LoadTexture(@"OfficeTextures\Phone.png");
     public bool newAction = false;
 
-    // Bool overlaps
-    public bool doorOverlap;
-    public bool lightROverlap;
-    public bool cameraBarOverlap;
+    CameraLogic cL = new();
+
+    Dictionary<string, Texture2D> textures = new();
 
     //Vector2s
     public Vector2 phonePos;
     Vector2 mousePos;
 
-    public override void Update(float deltaTime, Vector2 mousePos)
+
+    public Player()
     {
-        mousePos = Raylib.GetMousePosition();
+        LoadTextures();
+    }
 
 
-        CheckButtonOverlap();
-        CameraBarOverlap();
+    public void Update(Vector2 mousePos)
+    {
+        this.mousePos = mousePos;
+
+        OpenCloseMonitor();
+        if (currentState == PlayerState.inCamera)
+        {
+            cL.Update(mousePos);
+        }
+
         PhoneLogic();
     }
 
-
-    public override void Draw()
+    void LoadTextures()
     {
-        
+        textures.Add("CameraBar", Raylib.LoadTexture(@"OfficeTextures\CameraBar.png"));
+        textures.Add("Phone", Raylib.LoadTexture(@"OfficeTextures\Phone.png"));
     }
 
 
-    public void CheckButtonOverlap()
+    public void Draw()
     {
-        Rectangle doorButton = new(1565, 320, 100, 160);
+        if (currentState == PlayerState.inCamera)
+        {
+            cL.Draw();
+        }
 
-        doorOverlap = Raylib.CheckCollisionPointRec(mousePos, doorButton);
+        if (currentState == PlayerState.inOffice) // Draws UI when player is in cameras
+        {
+            Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 - 815, 850, Color.RED);
 
-        Rectangle lightR = new(1550, 510, 110, 165);
+            if (usingPhone)
+            {
+                Raylib.DrawTexture(textures["Phone"], (int)phonePos.X, (int)phonePos.Y, Color.WHITE);
+            }
+        }
 
-        lightROverlap = Raylib.CheckCollisionPointRec(mousePos, lightR);
+        if (currentState == PlayerState.inOffice || currentState == PlayerState.inCamera)
+        {
+            Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 + 45, 850, Color.WHITE);
+        }
+
+    }
+
+    public bool DoorButtonOverlap()
+    {
+        Rectangle doorButtonRec = new(1565, 320, 100, 160);
+
+        return Raylib.CheckCollisionPointRec(mousePos, doorButtonRec);
     }
 
 
-    public void CameraBarOverlap()
+    public bool CheckRLightOverlap()
     {
-        Rectangle cameraBar = new(1920 / 2 + 30, 830, 750, 150);
+        Rectangle lightRRec = new(1550, 510, 110, 165);
 
-        cameraBarOverlap = Raylib.CheckCollisionPointRec(mousePos, cameraBar);
+        return Raylib.CheckCollisionPointRec(mousePos, lightRRec);
+    }
 
 
-        if (cameraBarOverlap && currentState == PlayerState.inOffice && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inOffice && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+    bool CameraBarOverlap()
+    {
+        Rectangle cameraBarRec = new(1920 / 2 + 30, 830, 750, 150);
+
+        return Raylib.CheckCollisionPointRec(mousePos, cameraBarRec);
+    }
+
+
+    void OpenCloseMonitor()
+    {
+        if (CameraBarOverlap() && currentState == PlayerState.inOffice && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inOffice && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
         {
             currentState = PlayerState.inCamera;
-            newAction = true;
         }
-        else if (cameraBarOverlap && currentState == PlayerState.inCamera && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inCamera && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+        else if (CameraBarOverlap() && currentState == PlayerState.inCamera && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inCamera && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
         {
             currentState = PlayerState.inOffice;
-            newAction = true;
         }
     }
 
@@ -73,7 +111,8 @@ public class Player : Logic
     {
         Rectangle phoneBar = new(1920 / 2 - 830, 830, 750, 150);
 
-        if (usingPhone) { phonePos = new(mousePos.X - phone.Width / 2, mousePos.Y - phone.Height / 2); }
+        if (usingPhone)
+            phonePos = new(mousePos.X - phone.Width / 2, mousePos.Y - phone.Height / 2);
 
 
         if (Raylib.CheckCollisionPointRec(mousePos, phoneBar) && currentState == PlayerState.inOffice || Raylib.IsKeyPressed(KeyboardKey.KEY_E) && currentState == PlayerState.inOffice)
@@ -93,8 +132,6 @@ public class Player : Logic
             Raylib.EnableCursor();
             Raylib.SetMousePosition((int)phonePos.X, (int)phonePos.Y);
         }
-
-
     }
 
 

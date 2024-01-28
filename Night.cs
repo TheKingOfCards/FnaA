@@ -2,11 +2,19 @@ using System.Numerics;
 using System.Reflection.Metadata;
 using Raylib_cs;
 
-public class Night : Logic
+public class Night
 {
     //General varibels
     List<Animatronic> allAnimatronics = new();
     int power = 99;
+    Player player = new();
+
+    bool doorClosed = false;
+    List<Texture2D> doorImg = new() //[0] == Closed [1] == Open
+    {
+        Raylib.LoadTexture(@"OfficeTextures\OfficeDoorClosed.png"),
+        Raylib.LoadTexture(@"OfficeTextures\OfficeDoorOpen.png")
+    };
 
     //Show power variebls
     public int firstNumb = 9;
@@ -17,13 +25,7 @@ public class Night : Logic
     float powerTimer;
     float powerTimerMax = 5;
 
-    List<bool> playerActions = new() //[0] Door, [1] Right light, [2] Left light, [3] Camera
-    {
-        false,
-        false,
-        false,
-        false
-    };
+    Vector2 mousePos;
 
 
 
@@ -33,16 +35,34 @@ public class Night : Logic
     }
 
 
-    public override void Update(float deltaTime, Vector2 mousePos)
+    public void Update(float deltaTime, Vector2 mousePos)
     {
-        this.deltaTime = deltaTime; 
+        this.deltaTime = deltaTime;
+        this.mousePos = mousePos;
+
+        player.Update(mousePos);
+
+        if (player.DoorButtonOverlap() && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        {
+            doorClosed = !doorClosed;
+        }
+
         PowerLogic();
     }
 
 
-    public override void Draw()
+    public void Draw()
     {
+        if (doorClosed)
+        {
+            Raylib.DrawTexture(doorImg[0], 0, 0, Color.WHITE);
+        }
+        else
+        {
+            Raylib.DrawTexture(doorImg[1], 0, 0, Color.WHITE);
+        }
 
+        player.Draw();
     }
 
     void PowerLogic() // Handels the logic of power percentage
@@ -73,12 +93,6 @@ public class Night : Logic
         }
 
         //Power usage logic 
-
-    }
-
-
-    void CheckPowerUsage()
-    {
 
     }
 }
