@@ -5,11 +5,20 @@ using Raylib_cs;
 public class Player
 {
     //General variables
-    public PlayerState currentState = PlayerState.inOffice;
     public int currentNight;
     public bool usingPhone = false;
+    bool inCamera = false;
+    public bool newAction = false;
     Texture2D phone = Raylib.LoadTexture(@"OfficeTextures\Phone.png");
-    
+
+    public List<bool> playerActions = new() // [0] == Door [1] == LightR [2] == LightL [3] == MonitorUp
+    {
+        false,
+        false,
+        false,
+        false
+    };
+
 
     // Monitor variables
     float monitorTimer;
@@ -38,7 +47,7 @@ public class Player
         this.deltaTime = deltaTime;
 
         OpenCloseMonitor();
-        if (currentState == PlayerState.inCamera)
+        if (inCamera)
         {
             cL.Update(mousePos);
         }
@@ -55,12 +64,12 @@ public class Player
 
     public void Draw()
     {
-        if (currentState == PlayerState.inCamera)
+        if (inCamera)
         {
             cL.Draw();
         }
 
-        if (currentState == PlayerState.inOffice) // Draws UI when player is in cameras
+        if (!inCamera) // Draws UI when player is in cameras
         {
             Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 - 815, 850, Color.RED);
 
@@ -70,10 +79,7 @@ public class Player
             }
         }
 
-        if (currentState == PlayerState.inOffice || currentState == PlayerState.inCamera)
-        {
-            Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 + 45, 850, Color.WHITE);
-        }
+        Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 + 45, 850, Color.WHITE);
 
     }
 
@@ -81,8 +87,10 @@ public class Player
     {
         Rectangle doorButtonRec = new(1565, 320, 100, 160);
 
-        if(Raylib.CheckCollisionPointRec(mousePos, doorButtonRec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        if (Raylib.CheckCollisionPointRec(mousePos, doorButtonRec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
         {
+            newAction = true;
+            playerActions[0] = !playerActions[0];
             return true;
         }
         else
@@ -106,7 +114,16 @@ public class Player
     {
         Rectangle cameraBarRec = new(1920 / 2 + 30, 830, 750, 150);
 
-        return Raylib.CheckCollisionPointRec(mousePos, cameraBarRec);
+        if (Raylib.CheckCollisionPointRec(mousePos, cameraBarRec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        {
+            newAction = true;
+            playerActions[3] = !playerActions[3];
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 
@@ -116,14 +133,9 @@ public class Player
 
         if (monitorTimer <= 0)
         {
-            if (CameraBarOverlap() && currentState == PlayerState.inOffice && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inOffice && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+            if (CameraBarOverlap())
             {
-                currentState = PlayerState.inCamera;
-                monitorTimer = monitorTimerMax;
-            }
-            else if (CameraBarOverlap() && currentState == PlayerState.inCamera && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inCamera && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
-            {
-                currentState = PlayerState.inOffice;
+                inCamera = !inCamera;
                 monitorTimer = monitorTimerMax;
             }
         }
@@ -138,7 +150,7 @@ public class Player
             phonePos = new(mousePos.X - phone.Width / 2, mousePos.Y - phone.Height / 2);
 
 
-        if (Raylib.CheckCollisionPointRec(mousePos, phoneBar) && currentState == PlayerState.inOffice || Raylib.IsKeyPressed(KeyboardKey.KEY_E) && currentState == PlayerState.inOffice)
+        if (Raylib.CheckCollisionPointRec(mousePos, phoneBar) && !inCamera || Raylib.IsKeyPressed(KeyboardKey.KEY_E) && !inCamera)
         {
             if (!usingPhone)
             {
@@ -155,15 +167,5 @@ public class Player
             Raylib.EnableCursor();
             Raylib.SetMousePosition((int)phonePos.X, (int)phonePos.Y);
         }
-    }
-
-
-
-    public enum PlayerState
-    {
-        inOffice,
-        inCamera,
-        inStartScreen,
-        dead,
     }
 }

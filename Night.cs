@@ -29,8 +29,8 @@ public class Night
     public int secoundNumb = 9;
 
     //Power variabels
-    float powerTimer;
-    float powerTimerMax = 1;
+    float powerTimer = 0;
+    float powerTimerMax = 5;
 
     //Time variabels
     int currentTime = 1;
@@ -43,8 +43,6 @@ public class Night
 
     public Night()
     {
-        powerTimer = powerTimerMax;
-
         LoadNumberTextures();
     }
 
@@ -115,7 +113,7 @@ public class Night
     {
         timeTimer += deltaTime;
 
-        if(timeTimer >= changeHour)
+        if (timeTimer >= changeHour)
         {
             changeHour += changeHour;
             currentTime++;
@@ -157,6 +155,20 @@ public class Night
         }
 
         //Power usage logic 
+        if (player.newAction)
+        {
+            player.newAction = false;
 
+            int newUsage = 0;
+            foreach (bool action in player.playerActions)
+            {
+                if (!action)
+                {
+                    newUsage++;
+                }
+            }
+
+            powerTimerMax = newUsage++;
+        }
     }
 }
