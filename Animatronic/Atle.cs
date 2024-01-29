@@ -1,3 +1,5 @@
+using Raylib_cs;
+
 public class Atle : Animatronic
 {
     public Atle(int moveOp, int tM)

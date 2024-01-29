@@ -9,11 +9,17 @@ public class Player
     public int currentNight;
     public bool usingPhone = false;
     Texture2D phone = Raylib.LoadTexture(@"OfficeTextures\Phone.png");
-    public bool newAction = false;
+    
+
+    // Monitor variables
+    float monitorTimer;
+    float monitorTimerMax = 0.5f;
 
     CameraLogic cL = new();
 
     Dictionary<string, Texture2D> textures = new();
+
+    float deltaTime;
 
     //Vector2s
     public Vector2 phonePos;
@@ -26,9 +32,10 @@ public class Player
     }
 
 
-    public void Update(Vector2 mousePos)
+    public void Update(Vector2 mousePos, float deltaTime)
     {
         this.mousePos = mousePos;
+        this.deltaTime = deltaTime;
 
         OpenCloseMonitor();
         if (currentState == PlayerState.inCamera)
@@ -74,7 +81,16 @@ public class Player
     {
         Rectangle doorButtonRec = new(1565, 320, 100, 160);
 
-        return Raylib.CheckCollisionPointRec(mousePos, doorButtonRec);
+        if(Raylib.CheckCollisionPointRec(mousePos, doorButtonRec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+        // return Raylib.CheckCollisionPointRec(mousePos, doorButtonRec);
     }
 
 
@@ -96,13 +112,20 @@ public class Player
 
     void OpenCloseMonitor()
     {
-        if (CameraBarOverlap() && currentState == PlayerState.inOffice && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inOffice && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+        monitorTimer -= deltaTime;
+
+        if (monitorTimer <= 0)
         {
-            currentState = PlayerState.inCamera;
-        }
-        else if (CameraBarOverlap() && currentState == PlayerState.inCamera && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inCamera && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
-        {
-            currentState = PlayerState.inOffice;
+            if (CameraBarOverlap() && currentState == PlayerState.inOffice && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inOffice && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+            {
+                currentState = PlayerState.inCamera;
+                monitorTimer = monitorTimerMax;
+            }
+            else if (CameraBarOverlap() && currentState == PlayerState.inCamera && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON) || currentState == PlayerState.inCamera && Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+            {
+                currentState = PlayerState.inOffice;
+                monitorTimer = monitorTimerMax;
+            }
         }
     }
 

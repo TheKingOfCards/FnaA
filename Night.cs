@@ -9,21 +9,33 @@ public class Night
     int power = 99;
     Player player = new();
 
+    float deltaTime;
     bool doorClosed = false;
+
+    //Textures
     List<Texture2D> doorImg = new() //[0] == Closed [1] == Open
     {
         Raylib.LoadTexture(@"OfficeTextures\OfficeDoorClosed.png"),
         Raylib.LoadTexture(@"OfficeTextures\OfficeDoorOpen.png")
     };
 
+    List<Texture2D> numbers = new();
+    Texture2D percent = Raylib.LoadTexture(@"TextUI\PowerPercent.png");
+    Texture2D AImg = Raylib.LoadTexture(@"TextUI\A.png");
+    Texture2D MImg = Raylib.LoadTexture(@"TextUI\M.png");
+
     //Show power variebls
     public int firstNumb = 9;
     public int secoundNumb = 9;
 
-    //Timer varibels
-    float deltaTime;
+    //Power variabels
     float powerTimer;
-    float powerTimerMax = 5;
+    float powerTimerMax = 1;
+
+    //Time variabels
+    int currentTime = 1;
+    float timeTimer;
+    float changeHour = 10;
 
     Vector2 mousePos;
 
@@ -32,6 +44,22 @@ public class Night
     public Night()
     {
         powerTimer = powerTimerMax;
+
+        LoadNumberTextures();
+    }
+
+    void LoadNumberTextures()
+    {
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Zero.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\One.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Two.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Three.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Four.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Five.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Six.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Seven.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Eight.png"));
+        numbers.Add(Raylib.LoadTexture(@"TextUI\Nine.png"));
     }
 
 
@@ -40,14 +68,15 @@ public class Night
         this.deltaTime = deltaTime;
         this.mousePos = mousePos;
 
-        player.Update(mousePos);
+        player.Update(mousePos, deltaTime);
 
-        if (player.DoorButtonOverlap() && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        if (player.DoorButtonOverlap())
         {
             doorClosed = !doorClosed;
         }
 
         PowerLogic();
+        TimeLogic();
     }
 
 
@@ -63,7 +92,36 @@ public class Night
         }
 
         player.Draw();
+
+        DrawUI();
     }
+
+
+    void DrawUI()
+    {
+        //Draws power UI
+        Raylib.DrawTexture(numbers[firstNumb], 1750, 70, Color.WHITE);
+        Raylib.DrawTexture(numbers[secoundNumb], 1790, 70, Color.WHITE);
+        Raylib.DrawTexture(percent, 1830, 69, Color.WHITE);
+
+        //Draw time UI
+        Raylib.DrawTexture(numbers[currentTime], 100, 70, Color.WHITE);
+        Raylib.DrawTexture(AImg, 140, 70, Color.WHITE);
+        Raylib.DrawTexture(MImg, 180, 70, Color.WHITE);
+    }
+
+
+    void TimeLogic()
+    {
+        timeTimer += deltaTime;
+
+        if(timeTimer >= changeHour)
+        {
+            changeHour += changeHour;
+            currentTime++;
+        }
+    }
+
 
     void PowerLogic() // Handels the logic of power percentage
     {
@@ -76,7 +134,13 @@ public class Night
             if (secoundNumb == 0)
             {
                 secoundNumb = 9;
+
                 firstNumb--;
+                if (firstNumb <= 0)
+                {
+                    secoundNumb = 0;
+                    firstNumb = 0;
+                }
             }
             else
             {
