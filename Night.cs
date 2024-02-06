@@ -160,7 +160,7 @@ public class Night
             player.newAction = false;
 
             int newUsage = 0;
-            foreach (bool action in player.playerActions)
+            foreach (bool action in player.playerActions) // Checks if a action is false and adds more to timer if its true
             {
                 if (!action)
                 {

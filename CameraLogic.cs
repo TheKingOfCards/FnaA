@@ -1,10 +1,10 @@
 using System.Numerics;
+using FnaF;
 using Raylib_cs;
 
 public class CameraLogic
 {
     public string currentCamera;
-    Vector2 mousePos;
     Texture2D cameraMap = Raylib.LoadTexture(@"CameraTextures\CAM-Map.png");
     Dictionary<string, Room> allRooms = new()
     {
@@ -21,34 +21,30 @@ public class CameraLogic
     };
 
     Dictionary<string, Texture2D> roomImg = new();
-    List<string> currentCameraHover = new()
-    {
-        "GroupRoom",
-        "MainRoom",
-        "Felix",
-        "AtleCloset",
-        "Hallway",
-        "BeforeOfficeR",
-        "BeforeOfficeL",
-        "OfficeL",
-        "OfficeR"
-    };
-    List<Rectangle> cameraHitbox = new()
-    {
-        new(100, 100, 1, 1), //Cam 1
-        new(285, 625, 80, 50), //Cam 2 
-        new(390, 625, 80, 50), //Cam 3
-        new(179, 625, 85, 60), //Cam 4
-        new(285, 695, 85, 60), //Cam 5
-        new(345, 770, 85, 60), //Cam 6
-        new(220, 770, 85, 60), //Cam 7
-        new(220, 845, 85, 60), //Cam 8
-        new(345, 845, 85, 60) //Cam 9
-    };
+
+    List<Button> buttons = new();
+
 
     public CameraLogic()
     {
         currentCamera = "MainRoom";
+
+        //Cam 2
+        buttons.Add(new Button(new Rectangle(285, 625, 80, 50), () => Console.WriteLine(""), () => currentCamera = "MainRoom"));
+        //Cam 3
+        buttons.Add(new Button(new Rectangle(390, 625, 80, 50), () => Console.WriteLine(""), () => currentCamera = "Felix"));
+        //Cam 4
+        buttons.Add(new Button(new Rectangle(179, 625, 85, 60), () => Console.WriteLine(""), () => currentCamera = "AtleCloset"));
+        //Cam 5
+        buttons.Add(new Button(new Rectangle(285, 695, 85, 60), () => Console.WriteLine(""), () => currentCamera = "Hallway"));
+        //Cam 6
+        buttons.Add(new Button(new Rectangle(345, 770, 85, 60), () => Console.WriteLine(""), () => currentCamera = "BeforeOfficeR"));
+        //Cam 7
+        buttons.Add(new Button(new Rectangle(220, 770, 85, 60), () => Console.WriteLine(""), () => currentCamera = "BeforeOfficeL"));
+        //Cam 8
+        buttons.Add(new Button(new Rectangle(220, 845, 85, 60), () => Console.WriteLine(""), () => currentCamera = "OfficeL"));
+        //Cam 9
+        buttons.Add(new Button(new Rectangle(345, 845, 85, 60), () => Console.WriteLine(""), () => currentCamera = "OfficeR"));
 
         LoadCameraTextures();
     }
@@ -56,9 +52,7 @@ public class CameraLogic
 
     public void Update(Vector2 mousePos)
     {
-        this.mousePos = mousePos;
-
-        CheckCameraOverlap();
+        buttons.ForEach(b => b.Update(mousePos));
 
         Draw();
     }
@@ -83,17 +77,5 @@ public class CameraLogic
         Raylib.DrawTexture(roomImg[currentCamera], 0, 0, Color.WHITE);
         
         Raylib.DrawTexture(cameraMap, 150, 570, Color.WHITE);
-    }
-
-
-    public void CheckCameraOverlap() //Checks which camera the mouse is over
-    {
-        for (int i = 0; i < cameraHitbox.Count(); i++)
-        {
-            if (Raylib.CheckCollisionPointRec(mousePos, cameraHitbox[i]) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
-            {
-                currentCamera = currentCameraHover[i];
-            }
-        }
     }
 }

@@ -11,6 +11,8 @@ public class Button
 
     Vector2 mousePos;
 
+    // TODO: Fix so that not all buttons need a hover action HUR??!?!?!?!??!?!
+
     public Button(Rectangle rectangle, Action hoverAct, Action clickAct)
     {
         rect = rectangle;
@@ -22,16 +24,23 @@ public class Button
     {
         mousePos = mP;
 
-        if(CheckOverlap())
+        if (CheckOverlap())
         {
             hoverAction();
 
-            if(Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
-            {
-                clickAction();
-            }
+            Click();
         }
     }
+
+
+    void Click()
+    {
+        if (Raylib.IsMouseButtonPressed(MouseButton.MOUSE_BUTTON_LEFT))
+        {
+            clickAction();
+        }
+    }
+
 
     bool CheckOverlap()
     {
