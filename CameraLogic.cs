@@ -30,21 +30,21 @@ public class CameraLogic
         currentCamera = "MainRoom";
 
         //Cam 2
-        buttons.Add(new Button(new Rectangle(285, 625, 80, 50), () => Console.WriteLine(""), () => currentCamera = "MainRoom"));
+        buttons.Add(new Button(new Rectangle(285, 660, 80, 50), () => { }, () => currentCamera = "MainRoom"));
         //Cam 3
-        buttons.Add(new Button(new Rectangle(390, 625, 80, 50), () => Console.WriteLine(""), () => currentCamera = "Felix"));
+        buttons.Add(new Button(new Rectangle(391, 660, 80, 50), () => { }, () => currentCamera = "Felix"));
         //Cam 4
-        buttons.Add(new Button(new Rectangle(179, 625, 85, 60), () => Console.WriteLine(""), () => currentCamera = "AtleCloset"));
+        buttons.Add(new Button(new Rectangle(179, 660, 80, 50), () => { }, () => currentCamera = "AtleCloset"));
         //Cam 5
-        buttons.Add(new Button(new Rectangle(285, 695, 85, 60), () => Console.WriteLine(""), () => currentCamera = "Hallway"));
+        buttons.Add(new Button(new Rectangle(285, 735, 80, 50), () => { }, () => currentCamera = "Hallway"));
         //Cam 6
-        buttons.Add(new Button(new Rectangle(345, 770, 85, 60), () => Console.WriteLine(""), () => currentCamera = "BeforeOfficeR"));
+        buttons.Add(new Button(new Rectangle(348, 807, 80, 50), () => { }, () => currentCamera = "BeforeOfficeR"));
         //Cam 7
-        buttons.Add(new Button(new Rectangle(220, 770, 85, 60), () => Console.WriteLine(""), () => currentCamera = "BeforeOfficeL"));
+        buttons.Add(new Button(new Rectangle(221, 807, 80, 50), () => { }, () => currentCamera = "BeforeOfficeL"));
         //Cam 8
-        buttons.Add(new Button(new Rectangle(220, 845, 85, 60), () => Console.WriteLine(""), () => currentCamera = "OfficeL"));
+        buttons.Add(new Button(new Rectangle(223, 882, 80, 50), () => { }, () => currentCamera = "OfficeL"));
         //Cam 9
-        buttons.Add(new Button(new Rectangle(345, 845, 85, 60), () => Console.WriteLine(""), () => currentCamera = "OfficeR"));
+        buttons.Add(new Button(new Rectangle(348, 882, 80, 50), () => { }, () => currentCamera = "OfficeR"));
 
         LoadCameraTextures();
     }

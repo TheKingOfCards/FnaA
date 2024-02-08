@@ -1,6 +1,6 @@
 ﻿using Raylib_cs;
 
-Raylib.InitWindow(1920, 1080, "FnaA");
+Raylib.InitWindow(1920, 1050, "FnaA");
 
 // Raylib.SetExitKey(0);
 
