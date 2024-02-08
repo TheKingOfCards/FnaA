@@ -49,7 +49,7 @@ public class Player
         OpenCloseMonitor();
         if (inCamera)
         {
-            cL.Update(mousePos);
+            cL.Update(mousePos, deltaTime);
         }
 
         PhoneLogic();

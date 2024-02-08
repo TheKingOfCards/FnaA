@@ -19,8 +19,18 @@ public class CameraLogic
         {"OfficeL", new OfficeLeft()},
         {"Office", new Office()}
     };
-
     Dictionary<string, Texture2D> roomImg = new();
+    float deltaTime;
+
+    //Felix camera variabels
+    float timerMax = 1;
+    float timer;
+    int changeImgMax = 1;
+
+    Texture2D felixLight = Raylib.LoadTexture(@"CameraTextures\FCD-Dark.png");
+    Texture2D felixDark = Raylib.LoadTexture(@"CameraTextures\FCD-Ligt.png");
+
+    readonly Random random = new();
 
     List<Button> buttons = new();
 
@@ -50,8 +60,10 @@ public class CameraLogic
     }
 
 
-    public void Update(Vector2 mousePos)
+    public void Update(Vector2 mousePos, float delta)
     {
+        deltaTime = delta;
+
         buttons.ForEach(b => b.Update(mousePos));
 
         Draw();
@@ -63,7 +75,6 @@ public class CameraLogic
         roomImg.Add("CameraMap", Raylib.LoadTexture(@"CameraTextures\CAM-Map.png"));
         roomImg.Add("MainRoom", Raylib.LoadTexture(@"CameraTextures\MainRoom.png"));
         roomImg.Add("AtleCloset", Raylib.LoadTexture(@"CameraTextures\AtleCloset.png"));
-        roomImg.Add("Felix", Raylib.LoadTexture(@"CameraTextures\FCD-Dark.png"));
         roomImg.Add("Hallway", Raylib.LoadTexture(@"CameraTextures\Hallway.png"));
         roomImg.Add("BeforeOfficeR", Raylib.LoadTexture(@"CameraTextures\BeforeRightOffice.png"));
         roomImg.Add("BeforeOfficeL", Raylib.LoadTexture(@"CameraTextures\BeforeLeftOffice.png"));
@@ -74,8 +85,32 @@ public class CameraLogic
 
     public void Draw()
     {
-        Raylib.DrawTexture(roomImg[currentCamera], 0, 0, Color.WHITE);
-        
+        // ! Does not work
+        if (currentCamera == "Felix")
+        {
+            if(timer > timerMax)
+            {
+                int i = random.Next(0, changeImgMax++);
+
+                if (i == 0)
+                {
+                    Raylib.DrawTexture(felixDark, 0, 0, Color.WHITE);
+                }
+                else
+                {
+                    Raylib.DrawTexture(felixLight, 0, 0, Color.WHITE);
+                }
+            }
+            else
+            {
+                timer += deltaTime;
+            }
+        }
+        else
+        {
+            Raylib.DrawTexture(roomImg[currentCamera], 0, 0, Color.WHITE);
+        }
+
         Raylib.DrawTexture(cameraMap, 150, 570, Color.WHITE);
     }
 }
