@@ -40,7 +40,7 @@ public class StartScreen
         Raylib.DrawTextEx(pixelFont, "Five", new Vector2(200, 100), textSize, textSpacing, Color.WHITE);
         Raylib.DrawTextEx(pixelFont, "Nights", new Vector2(200, 170), textSize, textSpacing, Color.WHITE);
         Raylib.DrawTextEx(pixelFont, "At", new Vector2(200, 240), textSize, textSpacing, Color.WHITE);
-        Raylib.DrawTextEx(pixelFont, "{Placeholder}", new Vector2(200, 310), textSize, textSpacing, Color.WHITE);
+        Raylib.DrawTextEx(pixelFont, "Felix", new Vector2(200, 310), textSize, textSpacing, Color.WHITE);
         
         Raylib.DrawTextEx(pixelFont, "New Game", new Vector2(200, 600), textSize, textSpacing, Color.WHITE);
         Raylib.DrawTextEx(pixelFont, "Continue", new Vector2(200, 700), textSize, textSpacing, Color.WHITE);

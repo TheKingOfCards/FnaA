@@ -23,9 +23,10 @@ public class CameraLogic
     float deltaTime;
 
     //Felix camera variabels
-    float timerMax = 1;
+    float timerMax = 0.5f;
     float timer;
-    int changeImgMax = 1;
+    int changeImgMax = 100;
+    Texture2D latestFelixFrame;
 
     Texture2D felixLight = Raylib.LoadTexture(@"CameraTextures\FCD-Dark.png");
     Texture2D felixDark = Raylib.LoadTexture(@"CameraTextures\FCD-Ligt.png");
@@ -38,6 +39,8 @@ public class CameraLogic
     public CameraLogic()
     {
         currentCamera = "MainRoom";
+
+        latestFelixFrame = felixDark;
 
         //Cam 2
         buttons.Add(new Button(new Rectangle(285, 660, 80, 50), () => { }, () => currentCamera = "MainRoom"));
@@ -85,20 +88,23 @@ public class CameraLogic
 
     public void Draw()
     {
-        // ! Does not work
         if (currentCamera == "Felix")
         {
+            Raylib.DrawTexture(latestFelixFrame, 0, 0, Color.WHITE);
+
             if(timer > timerMax)
             {
+                timer = 0;
+                
                 int i = random.Next(0, changeImgMax++);
 
-                if (i == 0)
+                if (i >= changeImgMax/2)
                 {
-                    Raylib.DrawTexture(felixDark, 0, 0, Color.WHITE);
+                    latestFelixFrame = felixDark;
                 }
                 else
                 {
-                    Raylib.DrawTexture(felixLight, 0, 0, Color.WHITE);
+                    latestFelixFrame = felixLight;
                 }
             }
             else
