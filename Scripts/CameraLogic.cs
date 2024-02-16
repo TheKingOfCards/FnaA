@@ -42,6 +42,8 @@ public class CameraLogic
 
         latestFelixFrame = felixDark;
 
+        //Cam 1
+        buttons.Add(new Button(new Rectangle(285, 585, 80, 50), () => {}, () => currentCamera = "StartRoom") );
         //Cam 2
         buttons.Add(new Button(new Rectangle(285, 660, 80, 50), () => { }, () => currentCamera = "MainRoom"));
         //Cam 3
@@ -83,6 +85,7 @@ public class CameraLogic
         roomImg.Add("BeforeOfficeL", Raylib.LoadTexture(@"CameraTextures\BeforeLeftOffice.png"));
         roomImg.Add("OfficeR", Raylib.LoadTexture(@"CameraTextures\RightOffice.png"));
         roomImg.Add("OfficeL", Raylib.LoadTexture(@"CameraTextures\LeftOffice.png"));
+        roomImg.Add("StartRoom", Raylib.LoadTexture(@"CameraTextures\StartRoom.png"));
     }
 
 
@@ -92,7 +95,7 @@ public class CameraLogic
         {
             Raylib.DrawTexture(latestFelixFrame, 0, 0, Color.WHITE);
 
-            if(timer > timerMax)
+            if(timer >= timerMax)
             {
                 timer = 0;
                 

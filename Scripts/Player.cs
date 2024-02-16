@@ -83,11 +83,11 @@ public class Player
 
     }
 
-    public bool DoorButtonOverlap()
+    public bool DoorButton()
     {
-        Rectangle doorButtonRec = new(1565, 320, 100, 160);
+        Rectangle rec = new(1565, 320, 100, 160);
 
-        if (Raylib.CheckCollisionPointRec(mousePos, doorButtonRec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
         {
             newAction = true;
             playerActions[0] = !playerActions[0];
@@ -97,24 +97,30 @@ public class Player
         {
             return false;
         }
-
-        // return Raylib.CheckCollisionPointRec(mousePos, doorButtonRec);
     }
 
 
-    public bool CheckRLightOverlap()
+    public bool LightButton(Rectangle rec, int i)
     {
-        Rectangle lightRRec = new(1550, 510, 110, 165);
-
-        return Raylib.CheckCollisionPointRec(mousePos, lightRRec);
+        //Checks collision between mouse pos and the rectangle and returns true if left mouse button is pressed 
+        if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        {
+            newAction = true;
+            playerActions[i] = !playerActions[i];
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 
     bool CameraBarOverlap()
     {
-        Rectangle cameraBarRec = new(1920 / 2 + 30, 830, 750, 150);
+        Rectangle rec = new(1920 / 2 + 30, 830, 750, 150);
 
-        if (Raylib.CheckCollisionPointRec(mousePos, cameraBarRec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
         {
             newAction = true;
             playerActions[3] = !playerActions[3];

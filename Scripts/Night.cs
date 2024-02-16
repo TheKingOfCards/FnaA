@@ -10,7 +10,11 @@ public class Night
     Player player = new();
 
     float deltaTime;
+
+    //Office state bools
     bool doorClosed = false;
+    bool rightLightOn = false;
+    bool leftLightOn = false;
 
     //Textures
     List<Texture2D> doorImg = new() //[0] == Closed [1] == Open
@@ -37,16 +41,15 @@ public class Night
     float timeTimer;
     float changeHour = 10;
 
-    Vector2 mousePos;
+    Office office = new(); // TODO Change so that a new office is made every new night 
 
 
-
-    public Night()
+    public Night() // TODO --Create an office class and place marked methods in it
     {
         LoadNumberTextures();
     }
 
-    void LoadNumberTextures()
+    void LoadNumberTextures() // ? Office class
     {
         numbers.Add(Raylib.LoadTexture(@"TextUI\Zero.png"));
         numbers.Add(Raylib.LoadTexture(@"TextUI\One.png"));
@@ -64,38 +67,26 @@ public class Night
     public void Update(float deltaTime, Vector2 mousePos)
     {
         this.deltaTime = deltaTime;
-        this.mousePos = mousePos;
 
         player.Update(mousePos, deltaTime);
 
-        if (player.DoorButtonOverlap())
-        {
-            doorClosed = !doorClosed;
-        }
-
-        PowerLogic();
+        CheckButtons();
         TimeLogic();
+        PowerLogic();
     }
 
 
     public void Draw()
     {
-        if (doorClosed)
-        {
-            Raylib.DrawTexture(doorImg[0], 0, 0, Color.WHITE);
-        }
-        else
-        {
-            Raylib.DrawTexture(doorImg[1], 0, 0, Color.WHITE);
-        }
-
+        DrawOfficeStates();
+       
         player.Draw();
 
         DrawUI();
     }
 
 
-    void DrawUI()
+    void DrawUI() // TODO --Switch this methods place to player
     {
         //Draws power UI
         Raylib.DrawTexture(numbers[firstNumb], 1750, 70, Color.WHITE);
@@ -106,6 +97,56 @@ public class Night
         Raylib.DrawTexture(numbers[currentTime], 100, 70, Color.WHITE);
         Raylib.DrawTexture(AImg, 140, 70, Color.WHITE);
         Raylib.DrawTexture(MImg, 180, 70, Color.WHITE);
+    }
+
+
+    void DrawOfficeStates() // ? Office class
+    {
+        if (doorClosed)
+        {
+            Raylib.DrawTexture(doorImg[0], 0, 0, Color.WHITE);
+        }
+        else
+        {
+            Raylib.DrawTexture(doorImg[1], 0, 0, Color.WHITE);
+        }
+
+        if (rightLightOn)
+        {
+
+        }
+        else
+        {
+
+        }
+
+        if(leftLightOn)
+        {
+
+        }
+        else
+        {
+
+        }
+    }
+
+
+    void CheckButtons() // ? Office class
+    {
+        if (player.DoorButton())
+        {
+            doorClosed = !doorClosed;
+        }
+
+        if (player.LightButton(new Rectangle(1550, 510, 110, 165), 1)) //Right (int should be 1)
+        {
+            rightLightOn = !rightLightOn;
+        }
+
+        if (player.LightButton(new Rectangle(275, 520, 110, 165), 2)) //left (int should be 2)
+        {
+            leftLightOn = !leftLightOn;
+        }
     }
 
 
@@ -121,7 +162,7 @@ public class Night
     }
 
 
-    void PowerLogic() // Handels the logic of power percentage
+    void PowerLogic() // Handels the logic of power percentage // ? Office class
     {
         powerTimer -= deltaTime;
 
