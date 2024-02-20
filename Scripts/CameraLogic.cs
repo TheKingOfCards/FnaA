@@ -16,8 +16,7 @@ public class CameraLogic
         {"BeforeOfficeR", new BeforeOfficeRight()},
         {"BeforeOfficeL", new BeforeOfficeLeft()},
         {"OfficeR", new OfficeRight()},
-        {"OfficeL", new OfficeLeft()},
-        {"Office", new Office()}
+        {"OfficeL", new OfficeLeft()}
     };
     Dictionary<string, Texture2D> roomImg = new();
     float deltaTime;
@@ -28,8 +27,8 @@ public class CameraLogic
     int changeImgMax = 100;
     Texture2D latestFelixFrame;
 
-    Texture2D felixLight = Raylib.LoadTexture(@"CameraTextures\FCD-Dark.png");
-    Texture2D felixDark = Raylib.LoadTexture(@"CameraTextures\FCD-Ligt.png");
+    Texture2D felixLight = Raylib.LoadTexture(@"CameraTextures\FelixGyattDark.png");
+    Texture2D felixDark = Raylib.LoadTexture(@"CameraTextures\FelixGyattLight.png");
 
     readonly Random random = new();
 

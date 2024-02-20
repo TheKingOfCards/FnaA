@@ -82,39 +82,7 @@ public class Player
         Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 + 45, 850, Color.WHITE);
 
     }
-
-    public bool DoorButton()
-    {
-        Rectangle rec = new(1565, 320, 100, 160);
-
-        if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
-        {
-            newAction = true;
-            playerActions[0] = !playerActions[0];
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-
-    public bool LightButton(Rectangle rec, int i)
-    {
-        //Checks collision between mouse pos and the rectangle and returns true if left mouse button is pressed 
-        if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
-        {
-            newAction = true;
-            playerActions[i] = !playerActions[i];
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
+    
 
     bool CameraBarOverlap()
     {

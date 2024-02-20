@@ -1,4 +1,6 @@
 ﻿namespace FnaF;
+
+using System.Numerics;
 using Raylib_cs;
 
 public class Office
@@ -31,12 +33,19 @@ public class Office
     float powerTimerMax = 5;
 
     //Textures
+    Texture2D percent = Raylib.LoadTexture(@"TextUI\PowerPercent.png");
     List<Texture2D> numbers = new();
     List<Texture2D> doorImg = new() //[0] == Closed [1] == Open
     {
-        Raylib.LoadTexture(@"OfficeTextures\OfficeDoorClosed.png"),
-        Raylib.LoadTexture(@"OfficeTextures\OfficeDoorOpen.png")
+        Raylib.LoadTexture(@"OfficeTextures\DoorClosed.png"),
+        Raylib.LoadTexture(@"OfficeTextures\DoorOpen.png")
     };
+
+    Texture2D rightBlackout = Raylib.LoadTexture(@"OfficeTextures\RightBlackOut.png");
+    Texture2D leftBlackout = Raylib.LoadTexture(@"OfficeTextures\LeftBlackOut.png");
+
+
+    Vector2 mousePos;
 
 
 
@@ -46,13 +55,17 @@ public class Office
     }
 
 
-    public void Update(float delta)
+    public void Update(Vector2 mP, float delta)
     {
+        deltaTime = delta;
+        mousePos = mP;
+
         PowerLogic();
+        CheckButtons();
     }
 
 
-    void Draw()
+    public void Draw()
     {
         if (doorClosed)
         {
@@ -63,22 +76,42 @@ public class Office
             Raylib.DrawTexture(doorImg[1], 0, 0, Color.WHITE);
         }
 
-        if (rightLightOn)
+        if (!rightLightOn)
         {
-
-        }
-        else
-        {
-
+            Raylib.DrawTexture(rightBlackout, 1155, 284, Color.WHITE);
         }
 
-        if (leftLightOn)
+        if (!leftLightOn)
         {
-
+            Raylib.DrawTexture(leftBlackout, 625, 294, Color.WHITE);
         }
-        else
-        {
+    }
 
+
+    public void DrawUI()
+    {
+        //Draws power UI
+        Raylib.DrawTexture(numbers[firstNumb], 1750, 70, Color.WHITE);
+        Raylib.DrawTexture(numbers[secoundNumb], 1790, 70, Color.WHITE);
+        Raylib.DrawTexture(percent, 1830, 69, Color.WHITE);
+    }
+
+
+    void CheckButtons()
+    {
+        if (Buttons(new Rectangle(1565, 320, 100, 160), 0))
+        {
+            doorClosed = !doorClosed;
+        }
+
+        if (Buttons(new Rectangle(1550, 510, 110, 165), 1)) //Right (int should be 1)
+        {
+            rightLightOn = !rightLightOn;
+        }
+
+        if (Buttons(new Rectangle(275, 520, 110, 165), 2)) //left (int should be 2)
+        {
+            leftLightOn = !leftLightOn;
         }
     }
 
@@ -131,6 +164,22 @@ public class Office
             }
 
             powerTimerMax = newUsage++;
+        }
+    }
+
+
+    public bool Buttons(Rectangle rec, int i)
+    {
+        //Checks collision between mouse pos and the rectangle and returns true if left mouse button is pressed 
+        if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
+        {
+            stateChange = true;
+            stateBools[i] = !stateBools[i];
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
