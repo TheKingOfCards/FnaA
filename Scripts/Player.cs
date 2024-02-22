@@ -5,7 +5,6 @@ using Raylib_cs;
 public class Player
 {
     //General variables
-    public int currentNight;
     public bool usingPhone = false;
     bool inCamera = false;
     public bool newAction = false;
@@ -82,7 +81,7 @@ public class Player
         Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 + 45, 850, Color.WHITE);
 
     }
-    
+
 
     bool CameraBarOverlap()
     {

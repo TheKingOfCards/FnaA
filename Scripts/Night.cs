@@ -8,6 +8,7 @@ public class Night
     //General varibels
     List<Animatronic> allAnimatronics = new();
     Player player = new();
+    public bool dead = false;
 
     float deltaTime;
 
@@ -24,15 +25,17 @@ public class Night
 
 
     //Time variabels
-    int currentTime = 1;
+    public int currentTime = 1;
     float timeTimer;
-    float changeHour = 10;
+    float changeHour = 20;
 
-    Office office = new(); // TODO Change so that a new office is made every new night 
+    Office office;
 
 
-    public Night()
+    public Night(int cN)
     {
+        office = new Office();
+
         LoadNumberTextures();
     }
 
@@ -60,13 +63,18 @@ public class Night
         office.Update(mousePos, deltaTime);
 
         TimeLogic();
+
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_A))
+        {
+            dead = true;
+        }
     }
 
 
     public void Draw()
     {
         office.Draw();
-        
+
         player.Draw();
 
         office.DrawUI();
@@ -75,7 +83,7 @@ public class Night
     }
 
 
-    void DrawUI() 
+    void DrawUI()
     {
         //Draw time UI
         Raylib.DrawTexture(numbers[currentTime], 100, 70, Color.WHITE);
@@ -85,12 +93,14 @@ public class Night
 
     void TimeLogic()
     {
-        timeTimer += deltaTime;
-
         if (timeTimer >= changeHour)
         {
-            changeHour += changeHour;
             currentTime++;
+            timeTimer = 0;
+        }
+        else
+        {
+            timeTimer += deltaTime;
         }
     }
 }

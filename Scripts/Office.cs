@@ -30,7 +30,8 @@ public class Office
     //Power variabels
     int power = 99;
     float powerTimer = 0;
-    float powerTimerMax = 5;
+    float powerTimerMax = 0;
+    int basePowerDrain = 2;
 
     //Textures
     Texture2D percent = Raylib.LoadTexture(@"TextUI\PowerPercent.png");
@@ -52,6 +53,8 @@ public class Office
     public Office()
     {
         LoadNumberTextures();
+
+        NewPowerUsage();
     }
 
 
@@ -88,9 +91,8 @@ public class Office
     }
 
 
-    public void DrawUI()
+    public void DrawUI() //Draws power UI
     {
-        //Draws power UI
         Raylib.DrawTexture(numbers[firstNumb], 1750, 70, Color.WHITE);
         Raylib.DrawTexture(numbers[secoundNumb], 1790, 70, Color.WHITE);
         Raylib.DrawTexture(percent, 1830, 69, Color.WHITE);
@@ -116,13 +118,11 @@ public class Office
     }
 
 
-    void PowerLogic() // Handels the logic of power percentage // ? Office class
+    void PowerLogic() // Handels the logic of power percentage
     {
-        powerTimer -= deltaTime;
-
-        if (powerTimer <= 0) // Timer for the power
+        if (powerTimer >= powerTimerMax) // Timer for the power
         {
-            powerTimer = powerTimerMax;
+            powerTimer = 0;
 
             if (secoundNumb == 0)
             {
@@ -141,8 +141,12 @@ public class Office
             }
 
             power--;
-            powerTimer = powerTimerMax;
         }
+        else
+        {
+            powerTimer += deltaTime;
+        }
+
 
         if (power <= 0) // If the power reaches zero, player dies (maybe)
         {
@@ -152,19 +156,25 @@ public class Office
         //Power usage logic 
         if (stateChange)
         {
-            stateChange = false;
-
-            int newUsage = 0;
-            foreach (bool action in stateBools) // Checks if a action is false and adds more to timer if its true
-            {
-                if (!action)
-                {
-                    newUsage++;
-                }
-            }
-
-            powerTimerMax = newUsage++;
+            NewPowerUsage();
         }
+    }
+
+
+    void NewPowerUsage() 
+    {
+        stateChange = false;
+
+        int newUsage = 0;
+        foreach (bool action in stateBools) // Checks if a action is true and adds more to timer if its true
+        {
+            if (!action)
+            {
+                newUsage++;
+            }
+        }
+
+        powerTimerMax = newUsage + basePowerDrain;
     }
 
 

@@ -2,20 +2,10 @@ using System.Numerics;
 using FnaF;
 using Raylib_cs;
 
-public class StartScreen
+public class StartScreen : ScreenVar
 {
-    Font pixelFont = Raylib.LoadFont(@"Fonts\Minecraft.ttf");
-
-    int textSize = 60;
-    int textSpacing = 10;
-
     int arrowsYPos = 600;
-
-    Vector2 mousePos;
     public bool startNewNight = false;
-
-    //Buttons
-    List<Button> buttons = new();
 
 
     public StartScreen()
