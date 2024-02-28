@@ -11,7 +11,6 @@ public class Button
 
     Vector2 mousePos;
 
-    // TODO: Fix so that not all buttons need a hover action HUR??!?!?!?!??!?!
 
     public Button(Rectangle rectangle, Action hoverAct, Action clickAct)
     {

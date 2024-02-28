@@ -7,16 +7,7 @@ public class Player
     //General variables
     public bool usingPhone = false;
     bool inCamera = false;
-    public bool newAction = false;
     Texture2D phone = Raylib.LoadTexture(@"OfficeTextures\Phone.png");
-
-    public List<bool> playerActions = new() // [0] == Door [1] == LightR [2] == LightL [3] == MonitorUp
-    {
-        false,
-        false,
-        false,
-        false
-    };
 
 
     // Monitor variables
@@ -89,8 +80,8 @@ public class Player
 
         if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
         {
-            newAction = true;
-            playerActions[3] = !playerActions[3];
+            // newAction = true;
+            // playerActions[3] = !playerActions[3];
             return true;
         }
         else

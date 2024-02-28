@@ -18,7 +18,7 @@ public class AnimationController
     {
         for (int i = 0; i < animation.Count; i++)
         {
-            // TODO Make every frame as big as the screen and create them at (0, 0)
+            //* Make every frame as big as the screen and create them at (0, 0)
 
             Raylib.DrawTexture(animation[i], 0, 0, Color.WHITE);
 

@@ -2,7 +2,9 @@ public class BeforeOfficeLeft : Room
 {
     public BeforeOfficeLeft()
     {
-        roomPathId = "Left";
+        id = "BeforeOfficeRight";
+        path = "Right";
+        
         adjacentRooms.Add("Hallway");
         adjacentRooms.Add("OfficeL");
     }

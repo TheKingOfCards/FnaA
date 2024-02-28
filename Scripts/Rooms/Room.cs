@@ -1,7 +1,7 @@
 public class Room
 {
-    public string roomPathId = "";
-    public string name = "";
+    public string id = "";
+    public string path = "";
 
     public List <string> adjacentRooms = new();
 }

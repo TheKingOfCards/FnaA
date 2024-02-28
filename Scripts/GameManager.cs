@@ -6,6 +6,7 @@ using Raylib_cs;
 public class GameManager
 {
     Vector2 mousePos;
+    float deltaTime;
     int currentNight = 1;
 
     Night night;
@@ -25,83 +26,91 @@ public class GameManager
 
     public void Update()
     {
-        float deltaTime = Raylib.GetFrameTime();
+        deltaTime = Raylib.GetFrameTime();
         mousePos = Raylib.GetMousePosition();
 
-        //Keeps track of the current state of the game
-        if(gameState == GameState.inNight)
-        {
-            night.Update(deltaTime, mousePos);
-        }
-        else if(gameState == GameState.inStartScreen)
-        {
-            sS.Update(mousePos);
+        StateMachine();
 
-            if(sS.startNewNight)
-            {
-                gameState = GameState.inNight;
-            }
-        }
-        else if(gameState == GameState.inDeathScreen)
-        {
-            dS.Update(mousePos);
-
-            if(dS.restart)
-            {
-                gameState = GameState.inNight;
-                StartNewNight();
-            }
-        }
-        else if(gameState == GameState.inNightDoneScreen)
-        {
-            nightDoneScreen.Update(deltaTime);
-
-            if(nightDoneScreen.sixYPos == nightDoneScreen.sixYEndPos)
-            {
-                gameState = GameState.inNight;
-                StartNewNight();
-            }
-        }
-        
         //Checks if player has completed the night
-        if(night.currentTime == 6)
+        if (night.currentTime == 6)
         {
             nightDoneScreen = new NightDoneScreen();
             gameState = GameState.inNightDoneScreen;
-            
+
             night.currentTime = 0;
-            currentNight++; 
+            currentNight++;
         }
 
         //Checks if player is dead
-        if(night.dead)
+        if (night.dead)
         {
             gameState = GameState.inDeathScreen;
-            dS =  new DeathScreen(); 
+            dS = new DeathScreen();
         }
 
 
         DrawGame();
     }
 
-    void StartNewNight()
+
+    void StateMachine() // Keeps track of the current state of the game
+    {
+        if (gameState == GameState.inNight)
+        {
+            night.Update(deltaTime, mousePos);
+        }
+        else if (gameState == GameState.inStartScreen)
+        {
+            sS.Update(mousePos);
+
+            if (sS.startNewNight)
+            {
+                gameState = GameState.inNight;
+            }
+        }
+        else if (gameState == GameState.inDeathScreen)
+        {
+            dS.Update(mousePos);
+
+            if (dS.restart)
+            {
+                gameState = GameState.inNight;
+                StartNewNight();
+            }
+        }
+        else if (gameState == GameState.inNightDoneScreen)
+        {
+            nightDoneScreen.Update(deltaTime);
+
+            if (nightDoneScreen.sixYPos == nightDoneScreen.sixYEndPos)
+            {
+                gameState = GameState.inNight;
+                StartNewNight();
+            }
+        }
+    }
+
+
+    void StartNewNight() 
     {
         night = new Night(currentNight);
     }
+    
+
 
     public void DrawGame()
     {
         Raylib.BeginDrawing();
 
-        if(gameState == GameState.inNight)
+        if (gameState == GameState.inNight)
         {
-            night.Draw();        
+            night.Draw();
         }
-        else if(gameState == GameState.inStartScreen)
+        else if (gameState == GameState.inStartScreen)
         {
             sS.Draw();
         }
-        
+
 
         Raylib.EndDrawing();
     }
