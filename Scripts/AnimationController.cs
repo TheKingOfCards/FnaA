@@ -2,9 +2,6 @@ using Raylib_cs;
 
 public class AnimationController
 {
-    // TODO *Make it take in a list of "frames" and plays them with a set amount of time between each frame
-    // TODO *Make each logic class have its on animation controller, and animations that just it should use
-    // TODO *Make each of the animatroncics have its on death animation
     float timeBetweenFrames = 3;
     float timer;
     
@@ -22,7 +19,7 @@ public class AnimationController
 
             Raylib.DrawTexture(animation[i], 0, 0, Color.WHITE);
 
-            while(timer >= 0) // TODO Make better timer (better everything)
+            while(timer >= 0) // Timer so that each frame is out for x amount of secounds 
             {
                 timer -= deltaTime;
             }

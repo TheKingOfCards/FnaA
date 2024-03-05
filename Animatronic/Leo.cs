@@ -8,8 +8,8 @@ public class Leo: Animatronic
         pathID = "Left";
     }
 
-    public override void Move()
-    {
-        base.Move();
-    }
+    // public override void Move()
+    // {
+    //     base.Move();
+    // }
 }

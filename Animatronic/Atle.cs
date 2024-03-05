@@ -9,8 +9,8 @@ public class Atle : Animatronic
         name = "Atle";
     }
 
-    public override void Move()
-    {
+    // public override void Move()
+    // {
         
-    }
+    // }
 }

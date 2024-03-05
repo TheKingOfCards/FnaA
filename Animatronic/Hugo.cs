@@ -8,8 +8,8 @@ public class Hugo : Animatronic
         pathID = "Right";
     }
 
-    public override void Move()
-    {
-        base.Move();
-    }
+    // public override void Move()
+    // {
+    //     base.Move();
+    // }
 }

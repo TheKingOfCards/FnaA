@@ -36,10 +36,12 @@ public class Night
     {
         office = new Office();
 
+        allAnimatronics.Add(new Leo(20, 3));
+
         LoadNumberTextures();
     }
 
-    void LoadNumberTextures() // ? Office class
+    void LoadNumberTextures()
     {
         numbers.Add(Raylib.LoadTexture(@"TextUI\Zero.png"));
         numbers.Add(Raylib.LoadTexture(@"TextUI\One.png"));
@@ -62,9 +64,11 @@ public class Night
 
         office.Update(mousePos, deltaTime);
 
+        allAnimatronics.ForEach(a => a.Update(deltaTime));
+
         TimeLogic();
 
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_A))
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_A)) // ! TEST - Remove when done
         {
             dead = true;
         }
