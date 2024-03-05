@@ -1,3 +1,4 @@
+using FnaF;
 using Raylib_cs;
 
 public class Animatronic
@@ -17,7 +18,7 @@ public class Animatronic
     // Movement variabels
     int[,] map =
     {
-        {0,0,0,0,0}, // 2 == start room
+        {0,0,0,0,0}, 
         {0,0,2,0,0}, // 2 == start room
         {0,0,1,0,0}, // Main room
         {0,1,1,1,0}, // Hallways and toilets
@@ -51,7 +52,7 @@ public class Animatronic
 
             moveOp = 1;
 
-            if (CheckRandom(1, 21, moveOp)) // If true animatronic should move to a new room
+            if (GameFunctions.CheckRandom(1, 21, moveOp)) // If true animatronic should move to a new room
             {
                 int remove = 1;
                 int searchAmount = 0;
@@ -66,7 +67,7 @@ public class Animatronic
                         if (map[yPos - remove, xPos] == 1) // Checks if a room on the y axis is a 1
                         { 
                             // Make the new y pos for the animatronic if a CheckRandom() is true
-                            if (CheckRandom(1, 101, 75)) yPos -= remove;
+                            if (GameFunctions.CheckRandom(1, 101, 75)) yPos -= remove;
                             
                         }
                     }
@@ -74,7 +75,7 @@ public class Animatronic
                     {
                         if (map[yPos, xPos - remove] == 1)
                         {
-                            if (CheckRandom(1, 101, 75)) xPos -= remove;
+                            if (GameFunctions.CheckRandom(1, 101, 75)) xPos -= remove;
                         }
                     }
 
@@ -88,16 +89,5 @@ public class Animatronic
             }
         }
         else timer += deltaTime;  
-    }
-
-    static bool CheckRandom(int min, int max, int check) // Randomizer for that uses parameters to use less code
-    {
-        Random random = new();
-        
-        int i = random.Next(min, max);
-
-        if (i <= check) return true;
-
-        else return false;
     }
 }

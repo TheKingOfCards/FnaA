@@ -12,13 +12,7 @@ public class Night
 
     float deltaTime;
 
-    //Textures
-    List<Texture2D> doorImg = new() //[0] == Closed [1] == Open
-    {
-        Raylib.LoadTexture(@"OfficeTextures\OfficeDoorClosed.png"),
-        Raylib.LoadTexture(@"OfficeTextures\OfficeDoorOpen.png")
-    };
-
+    // Textures
     List<Texture2D> numbers = new();
     Texture2D AImg = Raylib.LoadTexture(@"TextUI\A.png");
     Texture2D MImg = Raylib.LoadTexture(@"TextUI\M.png");
@@ -56,13 +50,13 @@ public class Night
     }
 
 
-    public void Update(float deltaTime, Vector2 mousePos)
+    public void Update()
     {
-        this.deltaTime = deltaTime;
+        deltaTime = GameFunctions.GetdeltaTime();
 
-        player.Update(mousePos, deltaTime);
+        player.Update();
 
-        office.Update(mousePos, deltaTime);
+        office.Update();
 
         allAnimatronics.ForEach(a => a.Update(deltaTime));
 
@@ -87,9 +81,8 @@ public class Night
     }
 
 
-    void DrawUI()
+    void DrawUI() // Draw time UI
     {
-        //Draw time UI
         Raylib.DrawTexture(numbers[currentTime], 100, 70, Color.WHITE);
         Raylib.DrawTexture(AImg, 140, 70, Color.WHITE);
         Raylib.DrawTexture(MImg, 180, 70, Color.WHITE);

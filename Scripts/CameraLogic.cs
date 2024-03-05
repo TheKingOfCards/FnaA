@@ -64,11 +64,11 @@ public class CameraLogic
     }
 
 
-    public void Update(Vector2 mousePos, float delta)
+    public void Update()
     {
-        deltaTime = delta;
+        deltaTime = GameFunctions.GetdeltaTime();
 
-        buttons.ForEach(b => b.Update(mousePos));
+        buttons.ForEach(b => b.Update(GameFunctions.GetMousePos()));
 
         Draw();
     }

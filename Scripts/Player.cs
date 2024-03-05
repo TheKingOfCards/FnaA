@@ -1,4 +1,5 @@
 using System.Numerics;
+using FnaF;
 using Raylib_cs;
 
 
@@ -31,15 +32,15 @@ public class Player
     }
 
 
-    public void Update(Vector2 mousePos, float deltaTime)
+    public void Update()
     {
-        this.mousePos = mousePos;
-        this.deltaTime = deltaTime;
+        mousePos = GameFunctions.GetMousePos(); 
+        deltaTime = GameFunctions.GetdeltaTime(); 
 
         OpenCloseMonitor();
         if (inCamera)
         {
-            cL.Update(mousePos, deltaTime);
+            cL.Update();
         }
 
         PhoneLogic();
@@ -97,7 +98,7 @@ public class Player
 
         if (monitorTimer <= 0)
         {
-            if (CameraBarOverlap())
+            if (CameraBarOverlap() || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
             {
                 inCamera = !inCamera;
                 monitorTimer = monitorTimerMax;

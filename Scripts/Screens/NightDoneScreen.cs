@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.Numerics;
 using Raylib_cs;
 
-public class NightDoneScreen : ScreenVar
+public class NightDoneScreen : Screens
 {
     float fiveYPos = 470f;
     public float sixYPos = 570f;
     public float sixYEndPos = 460f;
 
-    //Timer variables
+    //Time variables
     float timer = 0f;
     float timerMax = 0.5f;
 
@@ -23,8 +23,10 @@ public class NightDoneScreen : ScreenVar
     }
 
 
-    public void Update(float deltaTime)
+    public override void Update()
     {
+        deltaTime = GameFunctions.GetdeltaTime();
+
         if (iniatalTimer >= 1.5f) //Small timer so that player can understand where they are
         {
             if (timer >= timerMax && sixYPos != sixYEndPos) //Timer so that the 6 goes up and 5 disappears

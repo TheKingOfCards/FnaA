@@ -2,7 +2,7 @@ using System.Numerics;
 using FnaF;
 using Raylib_cs;
 
-public class StartScreen : ScreenVar
+public class StartScreen : Screens
 {
     int arrowsYPos = 600;
     public bool startNewNight = false;
@@ -15,11 +15,13 @@ public class StartScreen : ScreenVar
     }
 
 
-    public void Update(Vector2 mP)
+    public override void Update()
     {
-        mousePos = mP;
-
+        mousePos = GameFunctions.GetMousePos();
+        
         buttons.ForEach(b => b.Update(mousePos));
+
+        Draw();
     }
 
 

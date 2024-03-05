@@ -3,7 +3,7 @@
 using System.Numerics;
 using Raylib_cs;
 
-public class DeathScreen : ScreenVar
+public class DeathScreen : Screens
 {
     int arrowsXPos = 1920/2 - 450;
 
@@ -15,9 +15,11 @@ public class DeathScreen : ScreenVar
         buttons.Add(new Button(new Rectangle(1920/2 + 150, 1050/2 - 50, 125, 60), () => arrowsXPos = 1010, () => Environment.Exit(0)));
     }
 
-    public void Update(Vector2 mP)
+    public override void Update()
     {
-        buttons.ForEach(b => b.Update(mP));
+        mousePos = GameFunctions.GetMousePos();
+
+        buttons.ForEach(b => b.Update(mousePos));
 
         Draw();
     }

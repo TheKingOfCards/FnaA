@@ -58,10 +58,10 @@ public class Office
     }
 
 
-    public void Update(Vector2 mP, float delta)
+    public void Update()
     {
-        deltaTime = delta;
-        mousePos = mP;
+        deltaTime = GameFunctions.GetdeltaTime();
+        mousePos = GameFunctions.GetMousePos();
 
         PowerLogic();
         CheckButtons();

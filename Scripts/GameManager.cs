@@ -5,11 +5,11 @@ using Raylib_cs;
 
 public class GameManager
 {
-    Vector2 mousePos;
-    float deltaTime;
     int currentNight = 1;
 
     Night night;
+
+
     StartScreen sS = new();
     DeathScreen dS = new();
     NightDoneScreen nightDoneScreen = new();
@@ -26,23 +26,17 @@ public class GameManager
 
     public void Update()
     {
-        deltaTime = Raylib.GetFrameTime();
-        mousePos = Raylib.GetMousePosition();
-
         StateMachine();
-
-        //Checks if player has completed the night
-        if (night.currentTime == 6)
+        
+        if (night.currentTime == 6) //Checks if player has completed the night
         {
             nightDoneScreen = new NightDoneScreen();
             gameState = GameState.inNightDoneScreen;
 
-            night.currentTime = 0;
             currentNight++;
         }
 
-        //Checks if player is dead
-        if (night.dead)
+        if (night.dead) // Checks if player is dead
         {
             gameState = GameState.inDeathScreen;
             dS = new DeathScreen();
@@ -57,12 +51,10 @@ public class GameManager
     {
         if (gameState == GameState.inNight)
         {
-            night.Update(deltaTime, mousePos);
+            night.Update();
         }
         else if (gameState == GameState.inStartScreen)
         {
-            sS.Update(mousePos);
-
             if (sS.startNewNight)
             {
                 gameState = GameState.inNight;
@@ -70,7 +62,7 @@ public class GameManager
         }
         else if (gameState == GameState.inDeathScreen)
         {
-            dS.Update(mousePos);
+            dS.Update();
 
             if (dS.restart)
             {
@@ -80,7 +72,7 @@ public class GameManager
         }
         else if (gameState == GameState.inNightDoneScreen)
         {
-            nightDoneScreen.Update(deltaTime);
+            nightDoneScreen.Update();
 
             if (nightDoneScreen.sixYPos == nightDoneScreen.sixYEndPos)
             {
@@ -91,12 +83,8 @@ public class GameManager
     }
 
 
-    void StartNewNight() 
-    {
-        night = new Night(currentNight);
-    }
+    void StartNewNight() => night = new Night(currentNight);
     
-
 
     public void DrawGame()
     {
@@ -106,11 +94,6 @@ public class GameManager
         {
             night.Draw();
         }
-        else if (gameState == GameState.inStartScreen)
-        {
-            sS.Draw();
-        }
-
 
         Raylib.EndDrawing();
     }
