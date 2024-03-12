@@ -1,11 +1,11 @@
 public class Hugo : Animatronic
 {
-    public Hugo(int moveOp, int tM)
+    public Hugo(int moveOp, int timerMax)
     {
-        this.moveOp = moveOp;
-        timerMax = tM;
-        name = "Hugo";
-        pathID = "Right";
+        _moveOp = moveOp;
+        _timerMax = timerMax;
+
+
     }
 
     // public override void Move()

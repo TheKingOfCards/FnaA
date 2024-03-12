@@ -3,16 +3,16 @@ using Raylib_cs;
 using System.Numerics;
 using System.Reflection.PortableExecutable;
 
-public class Screens // TODO Maybe change so that all screens can use the same variabel from this
+public class Screens 
 {
-    public Font pixelFont = Raylib.LoadFont(@"Fonts\Minecraft.ttf");
+    protected Font _pixelFont = Raylib.LoadFont(@"Fonts\Minecraft.ttf");
 
-    public int textSize = 60;
-    public int textSpacing = 10;
+    protected int _textSize = 60;
+    protected int _textSpacing = 10;
 
-    public float deltaTime;
-    public Vector2 mousePos;
-    public List<Button> buttons = new();
+    protected float _deltaTime;
+    protected Vector2 _mousePos;
+    protected List<Button> _buttons = new();
 
     public virtual void Update()
     {

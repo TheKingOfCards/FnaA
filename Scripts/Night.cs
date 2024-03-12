@@ -6,9 +6,7 @@ using Raylib_cs;
 public class Night
 {
     //General varibels
-    List<Animatronic> allAnimatronics = new();
     Player player = new();
-    public bool dead = false;
 
     float deltaTime;
 
@@ -29,8 +27,6 @@ public class Night
     public Night(int cN)
     {
         office = new Office();
-
-        allAnimatronics.Add(new Leo(20, 3));
 
         LoadNumberTextures();
     }
@@ -58,14 +54,7 @@ public class Night
 
         office.Update();
 
-        allAnimatronics.ForEach(a => a.Update(deltaTime));
-
-        TimeLogic();
-
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_A)) // ! TEST - Remove when done
-        {
-            dead = true;
-        }
+        TimeLogic(); 
     }
 
 
@@ -88,7 +77,7 @@ public class Night
         Raylib.DrawTexture(MImg, 180, 70, Color.WHITE);
     }
 
-    void TimeLogic()
+    void TimeLogic() // Handels the logic of time for the night
     {
         if (timeTimer >= changeHour)
         {

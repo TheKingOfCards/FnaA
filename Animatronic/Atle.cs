@@ -2,15 +2,14 @@ using Raylib_cs;
 
 public class Atle : Animatronic
 {
-    public Atle(int moveOp, int tM)
+    public Atle(int moveOp, int timerMax)
     {
-        this.moveOp = moveOp;
-        timerMax = tM; 
-        name = "Atle";
+        _moveOp = moveOp;
+        _timerMax = timerMax; 
     }
 
-    // public override void Move()
-    // {
+    protected override void Move()
+    {
         
-    // }
+    }
 }

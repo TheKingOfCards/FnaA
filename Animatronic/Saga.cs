@@ -1,11 +1,9 @@
 public class Saga : Animatronic
 {
-    public Saga(int moveOp, int tM)
+    public Saga(int moveOp, int timerMax)
     {
-        this.moveOp = moveOp;
-        timerMax = tM;
-        name = "Saga";
-        pathID = "Right";
+        _moveOp = moveOp;
+        _timerMax = timerMax;
     }
 
     // public override void Move()

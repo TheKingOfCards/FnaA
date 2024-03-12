@@ -1,11 +1,16 @@
 public class Henry: Animatronic
 {
-    public Henry(int moveOp, int tM)
+    public Henry(int moveOp, int timerMax)
     {
-        this.moveOp = moveOp;
-        timerMax = tM;
-        name = "Henry";
-        pathID = "Left";
+        _moveOp = moveOp;
+        _timerMax = timerMax;
+
+        
+        _positions.Add(7);
+        _positions.Add(5);
+        _positions.Add(2);
+        _positions.Add(1);
+        _positions.Add(0);
     }
 
     // public override void Move()

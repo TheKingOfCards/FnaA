@@ -1,30 +1,43 @@
+using System.Reflection.Metadata;
+using FnaF;
 using Raylib_cs;
 
-public class AnimationController
+public static class AnimationController
 {
-    float timeBetweenFrames = 3;
-    float timer;
-    
-
-    public AnimationController()
+    //* Make every frame as big as the screen and create them at (0, 0)
+    public static void PlayAnimation()
     {
-        timer = timeBetweenFrames;
-    }
+        float timeBetweenFrames = 3;
+        float timer = timeBetweenFrames;
 
-    public void PlayAnimation(List<Texture2D> animation, float deltaTime)
-    {
+        List<Texture2D> animation = new()
+            {
+                Raylib.LoadTexture(@"CameraTextures\AtleCloset.png"),
+                Raylib.LoadTexture(@"CameraTextures\FelixGyattLight.png"),
+                Raylib.LoadTexture(@"CameraTextures\Hallway.png")
+            };
+
         for (int i = 0; i < animation.Count; i++)
         {
-            //* Make every frame as big as the screen and create them at (0, 0)
+            bool frameHasBeenPlaced = false;
 
-            Raylib.DrawTexture(animation[i], 0, 0, Color.WHITE);
+            float deltaTime;
 
-            while(timer >= 0) // Timer so that each frame is out for x amount of secounds 
+            while (!frameHasBeenPlaced)
             {
-                timer -= deltaTime;
-            }
+                deltaTime = GameFunctions.GetdeltaTime();
 
-            timer = timeBetweenFrames;
+                if (timer >= timeBetweenFrames)
+                {
+                    timer = 0;
+                    frameHasBeenPlaced = true;
+                    Raylib.DrawTexture(animation[i], 0, 0, Color.WHITE);
+                }
+                else
+                {
+                    timer += deltaTime;
+                }
+            }
         }
     }
 }

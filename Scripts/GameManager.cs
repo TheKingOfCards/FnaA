@@ -6,15 +6,17 @@ using Raylib_cs;
 public class GameManager
 {
     int currentNight = 1;
+    int nightDoneTime = 6;
 
     Night night;
 
 
-    StartScreen sS = new();
-    DeathScreen dS = new();
-    NightDoneScreen nightDoneScreen = new();
-
+    StartScreen startScreen = new();
+    DeathScreen deathScreen;
+    NightDoneScreen nightDoneScreen;
+    // States 
     GameState gameState = GameState.inStartScreen;
+    InNightState inNightState = InNightState.inOffice;
 
     List<Animatronic> allAnimatronics = new();
 
@@ -22,26 +24,15 @@ public class GameManager
     public GameManager()
     {
         night = new Night(currentNight);
+
+        allAnimatronics.Add(new Henry(20, 3));
+
+        Console.WriteLine(allAnimatronics[0].currentPosition);
     }
 
     public void Update()
     {
         StateMachine();
-        
-        if (night.currentTime == 6) //Checks if player has completed the night
-        {
-            nightDoneScreen = new NightDoneScreen();
-            gameState = GameState.inNightDoneScreen;
-
-            currentNight++;
-        }
-
-        if (night.dead) // Checks if player is dead
-        {
-            gameState = GameState.inDeathScreen;
-            dS = new DeathScreen();
-        }
-
 
         DrawGame();
     }
@@ -52,19 +43,43 @@ public class GameManager
         if (gameState == GameState.inNight)
         {
             night.Update();
+
+            if (inNightState == InNightState.inCamera) // If player is in camera
+            {
+
+            }
+
+            if (allAnimatronics.Any(a => a.currentPosition == 0)) // Checks if a animatronic has reached the office
+            {
+                inNightState = InNightState.jumpscare;
+            }
+
+            allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
+
+
+            if (night.currentTime == nightDoneTime) //Checks if player has completed the night
+            {
+                night.currentTime = 0;
+                nightDoneScreen = new NightDoneScreen();
+                gameState = GameState.inNightDoneScreen;
+
+                currentNight++;
+            }
         }
         else if (gameState == GameState.inStartScreen)
         {
-            if (sS.startNewNight)
+            startScreen.Update();
+
+            if (startScreen.startNewNight)
             {
                 gameState = GameState.inNight;
             }
         }
         else if (gameState == GameState.inDeathScreen)
         {
-            dS.Update();
+            deathScreen.Update();
 
-            if (dS.restart)
+            if (deathScreen.restart)
             {
                 gameState = GameState.inNight;
                 StartNewNight();
@@ -74,7 +89,7 @@ public class GameManager
         {
             nightDoneScreen.Update();
 
-            if (nightDoneScreen.sixYPos == nightDoneScreen.sixYEndPos)
+            if (nightDoneScreen.sixYPos <= nightDoneScreen.sixYEndPos)
             {
                 gameState = GameState.inNight;
                 StartNewNight();
@@ -83,8 +98,13 @@ public class GameManager
     }
 
 
-    void StartNewNight() => night = new Night(currentNight);
-    
+    void StartNewNight()
+    {
+        allAnimatronics.Clear();
+        allAnimatronics.Add(new Henry(20, 3));
+
+        night = new Night(currentNight);
+    }
 
     public void DrawGame()
     {
@@ -93,6 +113,16 @@ public class GameManager
         if (gameState == GameState.inNight)
         {
             night.Draw();
+
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_A))
+            {
+                AnimationController.PlayAnimation();
+            }
+
+            if (allAnimatronics.Any(a => a.currentPosition == 0))
+            {
+                // AnimationController.PlayAnimation();
+            }
         }
 
         Raylib.EndDrawing();
@@ -105,5 +135,12 @@ public class GameManager
         inStartScreen,
         inDeathScreen,
         inNightDoneScreen
+    }
+
+    enum InNightState
+    {
+        inCamera,
+        inOffice,
+        jumpscare
     }
 }

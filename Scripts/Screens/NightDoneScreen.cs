@@ -25,25 +25,25 @@ public class NightDoneScreen : Screens
 
     public override void Update()
     {
-        deltaTime = GameFunctions.GetdeltaTime();
+        _deltaTime = GameFunctions.GetdeltaTime();
 
         if (iniatalTimer >= 1.5f) //Small timer so that player can understand where they are
         {
-            if (timer >= timerMax && sixYPos != sixYEndPos) //Timer so that the 6 goes up and 5 disappears
+            if (timer >= timerMax) //Timer so that the 6 goes up and 5 disappears
             {
-                sixYPos -= 10;
-                fiveYPos -= 10;
+                sixYPos -= 20;
+                fiveYPos -= 20;
 
                 timer = 0;
             }
             else
             {
-                timer += deltaTime;
+                timer += _deltaTime;
             }
         }
         else
         {
-            iniatalTimer += deltaTime;
+            iniatalTimer += _deltaTime;
         }
 
         Draw();
@@ -53,9 +53,9 @@ public class NightDoneScreen : Screens
     {
         Raylib.ClearBackground(Color.BLACK);
 
-        Raylib.DrawTextEx(pixelFont, "AM", new Vector2(980, 470), 100, textSpacing, Color.WHITE);
-        Raylib.DrawTextEx(pixelFont, "5", new Vector2(890, fiveYPos), 100, textSpacing, Color.WHITE);
-        Raylib.DrawTextEx(pixelFont, "6", new Vector2(890, sixYPos), 100, textSpacing, Color.WHITE);
+        Raylib.DrawTextEx(_pixelFont, "AM", new Vector2(980, 470), 100, _textSpacing, Color.WHITE);
+        Raylib.DrawTextEx(_pixelFont, "5", new Vector2(890, fiveYPos), 100, _textSpacing, Color.WHITE);
+        Raylib.DrawTextEx(_pixelFont, "6", new Vector2(890, sixYPos), 100, _textSpacing, Color.WHITE);
 
         Raylib.DrawRectangle(860, 370, 100, 100, Color.BLACK);
         Raylib.DrawRectangle(860, 570, 100, 100, Color.BLACK);
