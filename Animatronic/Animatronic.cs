@@ -9,7 +9,7 @@ public class Animatronic
     float _deltaTime;
     float _timer;
     protected float _timerMax;
-    public List<Texture2D> deathAnim;
+    public List<Texture2D> deathAnimation = new();
 
     // Movement variabels
     protected List<int> _positions = new();
@@ -25,11 +25,6 @@ public class Animatronic
         Move();
     }
 
-
-    protected void LoadDeathAnim()
-    {
-
-    }
 
     protected virtual void Move()
     {

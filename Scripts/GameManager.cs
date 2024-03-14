@@ -14,6 +14,8 @@ public class GameManager
     StartScreen startScreen = new();
     DeathScreen deathScreen;
     NightDoneScreen nightDoneScreen;
+
+    AnimationController animationController; // ! Try to make AnimationController static
     // States 
     GameState gameState = GameState.inStartScreen;
     InNightState inNightState = InNightState.inOffice;
@@ -49,9 +51,20 @@ public class GameManager
 
             }
 
-            if (allAnimatronics.Any(a => a.currentPosition == 0)) // Checks if a animatronic has reached the office
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_A)) // Checks if a animatronic has reached the office
             {
                 inNightState = InNightState.jumpscare;
+                animationController = new();
+            }
+
+            if (inNightState == InNightState.jumpscare) 
+            {
+                if (animationController.animationDone) // Checks if jumpscare animation is done
+                {
+                    inNightState = InNightState.inOffice;
+                    gameState = GameState.inDeathScreen;
+                    deathScreen = new();
+                }
             }
 
             allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
@@ -114,9 +127,9 @@ public class GameManager
         {
             night.Draw();
 
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_A))
+            if (inNightState == InNightState.jumpscare)
             {
-                AnimationController.PlayAnimation();
+                animationController.PlayAnimation(allAnimatronics[0].deathAnimation);
             }
 
             if (allAnimatronics.Any(a => a.currentPosition == 0))

@@ -2,42 +2,68 @@ using System.Reflection.Metadata;
 using FnaF;
 using Raylib_cs;
 
-public static class AnimationController
+public class AnimationController
 {
     //* Make every frame as big as the screen and create them at (0, 0)
-    public static void PlayAnimation()
+    int _currentFrameCount = -1;
+    readonly float _timeBetweenFrames = 3;
+    float _timer;
+    Texture2D _currentFrame;
+    public bool animationDone = false;
+
+
+    public AnimationController()
     {
-        float timeBetweenFrames = 3;
-        float timer = timeBetweenFrames;
+        _timer = _timeBetweenFrames;
+    }
 
-        List<Texture2D> animation = new()
-            {
-                Raylib.LoadTexture(@"CameraTextures\AtleCloset.png"),
-                Raylib.LoadTexture(@"CameraTextures\FelixGyattLight.png"),
-                Raylib.LoadTexture(@"CameraTextures\Hallway.png")
-            };
-
-        for (int i = 0; i < animation.Count; i++)
+    public void PlayAnimation(List<Texture2D> animation)
+    {
+        if (_timer >= _timeBetweenFrames)
         {
-            bool frameHasBeenPlaced = false;
+            _timer = 0;
+            _currentFrameCount++;
 
-            float deltaTime;
-
-            while (!frameHasBeenPlaced)
+            if (_currentFrameCount >= animation.Count)
             {
-                deltaTime = GameFunctions.GetdeltaTime();
-
-                if (timer >= timeBetweenFrames)
-                {
-                    timer = 0;
-                    frameHasBeenPlaced = true;
-                    Raylib.DrawTexture(animation[i], 0, 0, Color.WHITE);
-                }
-                else
-                {
-                    timer += deltaTime;
-                }
+                animationDone = true;
+                _currentFrameCount = 0;
+            }
+            else
+            {
             }
         }
+        else
+        {
+            _timer += GameFunctions.GetdeltaTime();
+        }
+
+        _currentFrame = animation[_currentFrameCount];
+        Raylib.DrawTexture(_currentFrame, 0, 0, Color.WHITE);
+    }
+
+
+    public static bool Test(List<Texture2D> animation) // ! Timer does not work 
+    {
+        float _timer = 0;
+        int _currentFrameCount = 0;
+        float _timeBetweenFrames = 3;
+        Texture2D _currentFrame;
+
+        if (_timer >= _timeBetweenFrames)
+        {
+            _timer = 0;
+            _currentFrameCount++;
+            if (_currentFrameCount > animation.Count) return true;
+        }
+        else
+        {
+            _timer += GameFunctions.GetdeltaTime();
+        }
+
+        _currentFrame = animation[_currentFrameCount];
+        Raylib.DrawTexture(_currentFrame, 0, 0, Color.WHITE);
+
+        return false;
     }
 }
