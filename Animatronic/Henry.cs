@@ -1,7 +1,7 @@
 using Raylib_cs;
 
 
-public class Henry: Animatronic
+public class Henry : Animatronic
 {
     public Henry(int moveOp, int timerMax)
     {

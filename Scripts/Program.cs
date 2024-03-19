@@ -1,4 +1,5 @@
-﻿using Raylib_cs;
+﻿using FnaF;
+using Raylib_cs;
 
 Raylib.InitWindow(1920, 1050, "FnaF");
 
@@ -6,6 +7,7 @@ Raylib.InitWindow(1920, 1050, "FnaF");
 
 GameManager gM = new();
 
+Textures.LoadTextures();
 
 while (!Raylib.WindowShouldClose())
 {

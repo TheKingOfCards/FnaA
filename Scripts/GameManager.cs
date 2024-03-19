@@ -9,6 +9,7 @@ public class GameManager
     int nightDoneTime = 6;
 
     Night night;
+    CameraLogic cameraLogic;
 
 
     StartScreen startScreen = new();
@@ -22,17 +23,19 @@ public class GameManager
 
     List<Animatronic> allAnimatronics = new();
 
+    Button cameraBar;
+
 
     public GameManager()
     {
-        night = new Night(currentNight);
-
         allAnimatronics.Add(new Henry(20, 3));
+
+        cameraBar = new Button(new Rectangle(1920 / 2 + 30, 830, 750, 150), () => { }, () => inNightState = InNightState.inCamera);
 
         Console.WriteLine(allAnimatronics[0].currentPosition);
     }
 
-    public void Update()
+    public void Update() // TODO Put camera logic in this class
     {
         StateMachine();
 
@@ -45,30 +48,15 @@ public class GameManager
         if (gameState == GameState.inNight)
         {
             night.Update();
+            allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
 
-            if (inNightState == InNightState.inCamera) // If player is in camera
-            {
+            NightStateMachine();
 
-            }
-
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_A)) // Checks if a animatronic has reached the office
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_A)) // ! Test
             {
                 inNightState = InNightState.jumpscare;
                 animationController = new();
             }
-
-            if (inNightState == InNightState.jumpscare) 
-            {
-                if (animationController.animationDone) // Checks if jumpscare animation is done
-                {
-                    inNightState = InNightState.inOffice;
-                    gameState = GameState.inDeathScreen;
-                    deathScreen = new();
-                }
-            }
-
-            allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
-
 
             if (night.currentTime == nightDoneTime) //Checks if player has completed the night
             {
@@ -85,6 +73,7 @@ public class GameManager
 
             if (startScreen.startNewNight)
             {
+                StartNewNight();
                 gameState = GameState.inNight;
             }
         }
@@ -111,8 +100,30 @@ public class GameManager
     }
 
 
+    void NightStateMachine()
+    {
+        if (inNightState == InNightState.jumpscare)
+        {
+            if (animationController.animationDone) // Checks if jumpscare animation is done
+            {
+                inNightState = InNightState.inOffice;
+                gameState = GameState.inDeathScreen;
+                deathScreen = new();
+            }
+        }
+
+        if (inNightState == InNightState.inCamera) // If player is in camera
+        {
+            cameraLogic.Update();
+        }
+    }
+
+
     void StartNewNight()
     {
+        night = new(currentNight);
+        cameraLogic = new();
+
         allAnimatronics.Clear();
         allAnimatronics.Add(new Henry(20, 3));
 
@@ -132,9 +143,9 @@ public class GameManager
                 animationController.PlayAnimation(allAnimatronics[0].deathAnimation);
             }
 
-            if (allAnimatronics.Any(a => a.currentPosition == 0))
+            if (inNightState == InNightState.inCamera)
             {
-                // AnimationController.PlayAnimation();
+                cameraLogic.Draw();
             }
         }
 

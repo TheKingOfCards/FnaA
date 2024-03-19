@@ -30,8 +30,8 @@ public class Office
     //Power variabels
     int power = 99;
     float powerTimer = 0;
+    readonly int basePowerDrain = 2;
     float powerTimerMax = 0;
-    int basePowerDrain = 2;
 
     //Textures
     Texture2D percent = Raylib.LoadTexture(@"TextUI\PowerPercent.png");
@@ -52,9 +52,7 @@ public class Office
 
     public Office()
     {
-        LoadNumberTextures();
-
-        NewPowerUsage();
+        powerTimerMax = basePowerDrain;
     }
 
 
@@ -72,29 +70,29 @@ public class Office
     {
         if (doorClosed)
         {
-            Raylib.DrawTexture(doorImg[0], 0, 0, Color.WHITE);
+            Raylib.DrawTexture(Textures.doorState[0], 0, 0, Color.WHITE);
         }
         else
         {
-            Raylib.DrawTexture(doorImg[1], 0, 0, Color.WHITE);
+            Raylib.DrawTexture(Textures.doorState[1], 0, 0, Color.WHITE);
         }
 
         if (!rightLightOn)
         {
-            Raylib.DrawTexture(rightBlackout, 1155, 284, Color.WHITE);
+            Raylib.DrawTexture(Textures.rightBlackout, 1155, 284, Color.WHITE);
         }
 
         if (!leftLightOn)
         {
-            Raylib.DrawTexture(leftBlackout, 625, 294, Color.WHITE);
+            Raylib.DrawTexture(Textures.leftBlackout, 625, 294, Color.WHITE);
         }
     }
 
 
     public void DrawUI() //Draws power UI
     {
-        Raylib.DrawTexture(numbers[firstNumb], 1750, 70, Color.WHITE);
-        Raylib.DrawTexture(numbers[secoundNumb], 1790, 70, Color.WHITE);
+        Raylib.DrawTexture(Textures.numbers[firstNumb], 1750, 70, Color.WHITE);
+        Raylib.DrawTexture(Textures.numbers[secoundNumb], 1790, 70, Color.WHITE);
         Raylib.DrawTexture(percent, 1830, 69, Color.WHITE);
     }
 
@@ -152,9 +150,8 @@ public class Office
         {
             Console.WriteLine("Dead");
         }
-
-        //Power usage logic 
-        if (stateChange)
+ 
+        if (stateChange) // Power usage logic
         {
             NewPowerUsage();
         }
@@ -191,20 +188,5 @@ public class Office
         {
             return false;
         }
-    }
-
-
-    void LoadNumberTextures()
-    {
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Zero.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\One.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Two.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Three.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Four.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Five.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Six.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Seven.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Eight.png"));
-        numbers.Add(Raylib.LoadTexture(@"TextUI\Nine.png"));
     }
 }
