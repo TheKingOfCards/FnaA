@@ -15,7 +15,7 @@ public class Player
     float monitorTimer;
     float monitorTimerMax = 0.5f;
 
-    CameraLogic cL = new();
+    // CameraLogic cL = new();
 
     Dictionary<string, Texture2D> textures = new();
 
@@ -37,41 +37,26 @@ public class Player
         mousePos = GameFunctions.GetMousePos(); 
         deltaTime = GameFunctions.GetdeltaTime(); 
 
-        OpenCloseMonitor();
-        if (inCamera)
-        {
-            cL.Update();
-        }
+        // OpenCloseMonitor();
 
         PhoneLogic();
     }
 
     void LoadTextures()
     {
-        textures.Add("CameraBar", Raylib.LoadTexture(@"OfficeTextures\CameraBar.png"));
         textures.Add("Phone", Raylib.LoadTexture(@"OfficeTextures\Phone.png"));
     }
 
 
     public void Draw()
     {
-        if (inCamera)
-        {
-            cL.Draw();
-        }
-
         if (!inCamera) // Draws UI when player is in cameras
         {
-            Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 - 815, 850, Color.RED);
-
             if (usingPhone)
             {
                 Raylib.DrawTexture(textures["Phone"], (int)phonePos.X, (int)phonePos.Y, Color.WHITE);
             }
         }
-
-        Raylib.DrawTexture(textures["CameraBar"], 1920 / 2 + 45, 850, Color.WHITE);
-
     }
 
 

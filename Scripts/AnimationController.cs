@@ -29,9 +29,6 @@ public class AnimationController
                 animationDone = true;
                 _currentFrameCount = 0;
             }
-            else
-            {
-            }
         }
         else
         {
@@ -43,7 +40,7 @@ public class AnimationController
     }
 
 
-    public static bool Test(List<Texture2D> animation) // ! Timer does not work 
+    public static bool Test(List<Texture2D> animation) // ! Timer does not work - fix before using
     {
         float _timer = 0;
         int _currentFrameCount = 0;

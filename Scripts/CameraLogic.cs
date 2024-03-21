@@ -26,7 +26,7 @@ public class CameraLogic
         timer = timerMax;
 
         //Cam 1
-        buttons.Add(new Button(new Rectangle(285, 585, 80, 50), () => {}, () => currentCamera = "StartRoom") );
+        buttons.Add(new Button(new Rectangle(285, 585, 80, 50), () => { }, () => currentCamera = "StartRoom"));
         //Cam 2
         buttons.Add(new Button(new Rectangle(285, 660, 80, 50), () => { }, () => currentCamera = "MainRoom"));
         //Cam 3
@@ -62,15 +62,13 @@ public class CameraLogic
     {
         if (currentCamera == "Felix")
         {
-            Raylib.DrawRectangle(1600, 450, 180, 180, Color.WHITE);
+            // Raylib.DrawRectangle(1600, 450, 180, 180, Color.WHITE);
 
-            if(timer >= timerMax)
+            if (timer >= timerMax)
             {
                 timer = 0;
-                
-                int i = random.Next(0, changeImgMax++);
 
-                if (i >= changeImgMax/2)
+                if (GameFunctions.CheckRandom(0, changeImgMax + 1, changeImgMax / 2))
                 {
                     latestFelixFrame = Textures.cameraTextures["FelixDark"];
                 }

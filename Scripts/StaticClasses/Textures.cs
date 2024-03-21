@@ -6,6 +6,8 @@ public static class Textures
 {
     // Camera textures
     public static Dictionary<string, Texture2D> cameraTextures;
+    public static List<Texture2D> circleTextures;
+    public static Texture2D cameraBar;
     // Camera textures end
 
     //Office textures
@@ -34,6 +36,17 @@ public static class Textures
             { "FelixLight", Raylib.LoadTexture(@"CameraTextures\FelixGyattLight.png") },
             { "FelixDark", Raylib.LoadTexture(@"CameraTextures\FelixGyattDark.png") }
         };
+
+        circleTextures = new()
+        {
+            Raylib.LoadTexture(@"CameraTextures\EmptyCircle.png"),
+            Raylib.LoadTexture(@"CameraTextures\QuarterCircle.png"),
+            Raylib.LoadTexture(@"CameraTextures\HalfCircle.png"),
+            Raylib.LoadTexture(@"CameraTextures\AlmostCircle.png"),
+            Raylib.LoadTexture(@"CameraTextures\FullCircle.png")
+        };
+
+        cameraBar = Raylib.LoadTexture(@"OfficeTextures\CameraBar.png");
         // Load camera textures end
 
         // Load Office textures

@@ -7,9 +7,12 @@ public class GameManager
 {
     int currentNight = 1;
     int nightDoneTime = 6;
+    bool inCamera;
 
     Night night;
     CameraLogic cameraLogic;
+
+    Felix felix = new();
 
 
     StartScreen startScreen = new();
@@ -30,7 +33,7 @@ public class GameManager
     {
         allAnimatronics.Add(new Henry(20, 3));
 
-        cameraBar = new Button(new Rectangle(1920 / 2 + 30, 830, 750, 150), () => { }, () => inNightState = InNightState.inCamera);
+        cameraBar = new Button(new Rectangle(1920 / 2 + 30, 830, 750, 150), () => { }, () => inCamera = !inCamera);
 
         Console.WriteLine(allAnimatronics[0].currentPosition);
     }
@@ -49,6 +52,11 @@ public class GameManager
         {
             night.Update();
             allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
+            cameraBar.Update(GameFunctions.GetMousePos());
+            felix.Update(cameraLogic.currentCamera, inCamera);
+
+            if (inCamera) inNightState = InNightState.inCamera;
+            else inNightState = InNightState.inOffice;
 
             NightStateMachine();
 
@@ -63,7 +71,6 @@ public class GameManager
                 night.currentTime = 0;
                 nightDoneScreen = new NightDoneScreen();
                 gameState = GameState.inNightDoneScreen;
-
                 currentNight++;
             }
         }
@@ -114,6 +121,7 @@ public class GameManager
 
         if (inNightState == InNightState.inCamera) // If player is in camera
         {
+            Console.WriteLine("In Camera");
             cameraLogic.Update();
         }
     }
@@ -146,7 +154,11 @@ public class GameManager
             if (inNightState == InNightState.inCamera)
             {
                 cameraLogic.Draw();
+                felix.Draw();
             }
+
+            Raylib.DrawTexture(Textures.cameraBar, 1920 / 2 + 30, 830, Color.WHITE);
+            Raylib.DrawTexture(Textures.cameraBar, 130, 830, Color.RED);
         }
 
         Raylib.EndDrawing();
