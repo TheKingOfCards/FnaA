@@ -15,6 +15,7 @@ public class Animatronic
     protected List<int> _positions = new();
     protected int listIndex = 0;
     public int currentPosition = 8; // Is 8 becuse start pos
+    public Dictionary<string, Texture2D> cameraImg = new();
 
 
 
@@ -32,25 +33,36 @@ public class Animatronic
         {
             _timer = 0;
 
+            Console.WriteLine(currentPosition);
+
             if (GameFunctions.CheckRandom(1, 21, _moveOp))
             {
-                if (GameFunctions.CheckRandom(1, 101, 90)) // Random check for if animatronic should move forward or backwards
+                if (GameFunctions.CheckRandom(1, 101, 50)) // Random check for if animatronic should move forward or backwards
                 {
-                    if (listIndex != _positions.Count) // Prevents out of range error
+                    if (listIndex <= _positions.Count - 2 && listIndex >= 0) // Prevents out of range error
                     {
-                        currentPosition = _positions[listIndex++];
+                        if (currentPosition == 8) // Checks if animatronic is in start position and starts movement
+                        {
+                            currentPosition = _positions[listIndex];
+                        }
+                        else
+                        {
+                            listIndex++;
+                            currentPosition = _positions[listIndex];
+                        }
                     }
                 }
                 else // Move backwards
                 {
-                    if (listIndex != 0) // Prevents out of range error
+                    if (listIndex > 0 && listIndex <= _positions.Count - 1) // Prevents out of range error
                     {
-                        currentPosition = _positions[listIndex--];
+                        listIndex--;
+                        currentPosition = _positions[listIndex];
                     }
                 }
 
 
-                Console.WriteLine(currentPosition);
+                Console.WriteLine("---" + currentPosition);
             }
         }
         else _timer += _deltaTime;

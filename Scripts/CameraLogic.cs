@@ -21,7 +21,7 @@ public class CameraLogic
 
     public CameraLogic()
     {
-        currentCamera = "MainRoom";
+        currentCamera = "StartRoom";
 
         timer = timerMax;
 

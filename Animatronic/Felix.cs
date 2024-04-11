@@ -4,7 +4,10 @@ using Raylib_cs;
 public class Felix
 {
     float _timer;
-    float _timerMax = 20;
+    readonly float _timerMax = 20;
+    float _timerAcceleration = 1.2f;
+
+    Rectangle circleHitBox = new(1600, 450, 180, 180);
 
     bool _drawCircle = false;
 
@@ -13,13 +16,28 @@ public class Felix
         _timer = _timerMax;
     }
 
-    public void Update(String currentCamera, bool inCamera)
+    public void Update(string currentCamera, bool inCamera)
     {
-        if (currentCamera == "Felix" && inCamera) _drawCircle = true;
-        else _drawCircle = false;
+        if (currentCamera == "Felix" && inCamera) // Checks if player is in Felixs camera and if player is using camera 
+        {
+            _drawCircle = true;
 
-        _timer -= GameFunctions.GetdeltaTime();
+            if (Raylib.CheckCollisionPointRec(GameFunctions.GetMousePos(), circleHitBox) && Raylib.IsMouseButtonDown(MouseButton.MOUSE_BUTTON_LEFT))
+            {
+                if (_timer <= _timerMax) // Adds to timer of player is in the circle and presses LMB
+                {
+                    _timer += GameFunctions.GetdeltaTime() * _timerAcceleration;
+                }
+                else
+                {
+                    _timer = _timerMax;
+                }
+            }
+            else _timer -= GameFunctions.GetdeltaTime();
+        }
+        else _drawCircle = false;
     }
+
 
     public void Draw() // Draws cirecle in Felixs camera depending on if player is in and what timer is
     {
@@ -43,7 +61,7 @@ public class Felix
                 }
                 else index = Textures.circleTextures.Count - 2;
             }
-            else index = Textures.circleTextures.Count -1;
+            else index = Textures.circleTextures.Count - 1;
 
             Raylib.DrawTexture(Textures.circleTextures[index], 1600, 450, Color.WHITE);
         }

@@ -20,6 +20,7 @@ public class GameManager
     NightDoneScreen nightDoneScreen;
 
     AnimationController animationController; // ! Try to make AnimationController static
+    
     // States 
     GameState gameState = GameState.inStartScreen;
     InNightState inNightState = InNightState.inOffice;
@@ -28,7 +29,7 @@ public class GameManager
 
     Button cameraBar;
 
-
+    // TODO Draw animatronics in camera - take player currenct camera and animatronic posistion draw
     public GameManager()
     {
         allAnimatronics.Add(new Henry(20, 3));
@@ -38,7 +39,7 @@ public class GameManager
         Console.WriteLine(allAnimatronics[0].currentPosition);
     }
 
-    public void Update() // TODO Put camera logic in this class
+    public void Update() 
     {
         StateMachine();
 
@@ -121,7 +122,6 @@ public class GameManager
 
         if (inNightState == InNightState.inCamera) // If player is in camera
         {
-            Console.WriteLine("In Camera");
             cameraLogic.Update();
         }
     }
@@ -133,7 +133,7 @@ public class GameManager
         cameraLogic = new();
 
         allAnimatronics.Clear();
-        allAnimatronics.Add(new Henry(20, 3));
+        allAnimatronics.Add(new Henry(20, 4));
 
         night = new Night(currentNight);
     }
@@ -155,10 +155,18 @@ public class GameManager
             {
                 cameraLogic.Draw();
                 felix.Draw();
+                foreach (Animatronic animatronic in allAnimatronics)
+                {
+                    DrawAnimatronicCamera.DrawAnimantronicOnCamera(cameraLogic.currentCamera, animatronic.cameraImg, animatronic.currentPosition);
+                }
+            }
+
+            if (inNightState == InNightState.inOffice)
+            {
+                Raylib.DrawTexture(Textures.cameraBar, 130, 830, Color.RED);
             }
 
             Raylib.DrawTexture(Textures.cameraBar, 1920 / 2 + 30, 830, Color.WHITE);
-            Raylib.DrawTexture(Textures.cameraBar, 130, 830, Color.RED);
         }
 
         Raylib.EndDrawing();
