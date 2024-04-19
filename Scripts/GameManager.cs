@@ -20,7 +20,7 @@ public class GameManager
     NightDoneScreen nightDoneScreen;
 
     AnimationController animationController; // ! Try to make AnimationController static
-    
+
     // States 
     GameState gameState = GameState.inStartScreen;
     InNightState inNightState = InNightState.inOffice;
@@ -39,7 +39,7 @@ public class GameManager
         Console.WriteLine(allAnimatronics[0].currentPosition);
     }
 
-    public void Update() 
+    public void Update()
     {
         StateMachine();
 
@@ -57,14 +57,18 @@ public class GameManager
             felix.Update(cameraLogic.currentCamera, inCamera);
 
             if (inCamera) inNightState = InNightState.inCamera;
-            else inNightState = InNightState.inOffice;
+            else if (!inCamera && inNightState != InNightState.jumpscare) inNightState = InNightState.inOffice;
 
             NightStateMachine();
-
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_A)) // ! Test
+            //! This dosent work -- fix first (animation plays wrong) death screen does not show
+            foreach (Animatronic animatronic in allAnimatronics) // Checks if palyer is in camra and a animatronic is outside office
             {
-                inNightState = InNightState.jumpscare;
-                animationController = new();
+                if (animatronic.currentPosition == 0 && inNightState == InNightState.inCamera)
+                {
+                    inNightState = InNightState.jumpscare;
+                    inCamera = false;
+                    animationController = new(animatronic.deathAnimation);
+                }
             }
 
             if (night.currentTime == nightDoneTime) //Checks if player has completed the night
@@ -148,7 +152,7 @@ public class GameManager
 
             if (inNightState == InNightState.jumpscare)
             {
-                animationController.PlayAnimation(allAnimatronics[0].deathAnimation);
+                animationController.PlayAnimation();
             }
 
             if (inNightState == InNightState.inCamera)
@@ -160,13 +164,17 @@ public class GameManager
                     DrawAnimatronicCamera.DrawAnimantronicOnCamera(cameraLogic.currentCamera, animatronic.cameraImg, animatronic.currentPosition);
                 }
             }
-
+            
             if (inNightState == InNightState.inOffice)
             {
                 Raylib.DrawTexture(Textures.cameraBar, 130, 830, Color.RED);
             }
 
-            Raylib.DrawTexture(Textures.cameraBar, 1920 / 2 + 30, 830, Color.WHITE);
+            // For textures that need to be drawn in bot camera and office 
+            if (inNightState == InNightState.inCamera || inNightState == InNightState.inOffice)
+            {
+                Raylib.DrawTexture(Textures.cameraBar, 1920 / 2 + 30, 830, Color.WHITE);
+            }
         }
 
         Raylib.EndDrawing();

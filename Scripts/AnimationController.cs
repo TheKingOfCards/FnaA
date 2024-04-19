@@ -10,21 +10,23 @@ public class AnimationController
     float _timer;
     Texture2D _currentFrame;
     public bool animationDone = false;
+    List<Texture2D> _animation;
 
 
-    public AnimationController()
+    public AnimationController(List<Texture2D> animation)
     {
         _timer = _timeBetweenFrames;
+        _animation = animation;
     }
 
-    public void PlayAnimation(List<Texture2D> animation)
+    public void PlayAnimation()
     {
         if (_timer >= _timeBetweenFrames)
         {
             _timer = 0;
             _currentFrameCount++;
 
-            if (_currentFrameCount >= animation.Count)
+            if (_currentFrameCount >= _animation.Count)
             {
                 animationDone = true;
                 _currentFrameCount = 0;
@@ -35,7 +37,7 @@ public class AnimationController
             _timer += GameFunctions.GetdeltaTime();
         }
 
-        _currentFrame = animation[_currentFrameCount];
+        _currentFrame = _animation[_currentFrameCount];
         Raylib.DrawTexture(_currentFrame, 0, 0, Color.WHITE);
     }
 

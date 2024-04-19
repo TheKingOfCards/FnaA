@@ -37,7 +37,7 @@ public class Animatronic
 
             if (GameFunctions.CheckRandom(1, 21, _moveOp))
             {
-                if (GameFunctions.CheckRandom(1, 101, 50)) // Random check for if animatronic should move forward or backwards
+                if (GameFunctions.CheckRandom(1, 101, 100)) // Random check for if animatronic should move forward or backwards
                 {
                     if (listIndex <= _positions.Count - 2 && listIndex >= 0) // Prevents out of range error
                     {

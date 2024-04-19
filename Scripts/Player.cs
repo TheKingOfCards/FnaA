@@ -60,38 +60,6 @@ public class Player
     }
 
 
-    bool CameraBarOverlap()
-    {
-        Rectangle rec = new(1920 / 2 + 30, 830, 750, 150);
-
-        if (Raylib.CheckCollisionPointRec(mousePos, rec) && Raylib.IsMouseButtonPressed(MouseButton.MOUSE_LEFT_BUTTON))
-        {
-            // newAction = true;
-            // playerActions[3] = !playerActions[3];
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-
-    void OpenCloseMonitor()
-    {
-        monitorTimer -= deltaTime;
-
-        if (monitorTimer <= 0)
-        {
-            if (CameraBarOverlap() || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
-            {
-                inCamera = !inCamera;
-                monitorTimer = monitorTimerMax;
-            }
-        }
-    }
-
-
     public void PhoneLogic()
     {
         Rectangle phoneBar = new(1920 / 2 - 830, 830, 750, 150);
