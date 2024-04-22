@@ -2,6 +2,7 @@
 using Raylib_cs;
 
 Raylib.InitWindow(1920, 1050, "FnaF");
+Raylib.InitAudioDevice();
 
 // Raylib.SetExitKey(0);
 

@@ -3,13 +3,24 @@ using Raylib_cs;
 
 public class Felix
 {
-    float _timer;
+    public float _timer;
     readonly float _timerMax = 20;
     float _timerAcceleration = 1.2f;
 
     Rectangle circleHitBox = new(1600, 450, 180, 180);
 
+    public List<Texture2D> deathAnimation = new()
+    {
+        Raylib.LoadTexture(@"AnimatronicImg\FelixDeathAnimation\FelixDead.png"),
+        Raylib.LoadTexture(@"AnimatronicImg\FelixDeathAnimation\FelixDead1.png"),
+        Raylib.LoadTexture(@"AnimatronicImg\FelixDeathAnimation\FelixDead2.png"),
+        Raylib.LoadTexture(@"AnimatronicImg\FelixDeathAnimation\FelixDead3.png"),
+        Raylib.LoadTexture(@"AnimatronicImg\FelixDeathAnimation\FelixDead3.png"),
+        Raylib.LoadTexture(@"AnimatronicImg\FelixDeathAnimation\FelixDead3.png")
+    };
+
     bool _drawCircle = false;
+    bool chargingCircle = false;
 
     public Felix()
     {
@@ -32,10 +43,15 @@ public class Felix
                 {
                     _timer = _timerMax;
                 }
+                chargingCircle = true;
             }
-            else _timer -= GameFunctions.GetdeltaTime();
         }
         else _drawCircle = false;
+
+        if(!chargingCircle)
+        {
+            _timer -= GameFunctions.GetdeltaTime();
+        }
     }
 
 

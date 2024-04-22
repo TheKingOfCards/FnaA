@@ -61,6 +61,15 @@ public class GameManager
             else if (!inCamera && inNightState != InNightState.jumpscare) inNightState = InNightState.inOffice;
 
             NightStateMachine();
+
+            // ! TEST
+            if(felix._timer <= 0 && inNightState != InNightState.jumpscare)
+            {
+                Console.WriteLine("JumpS");
+                inNightState = InNightState.jumpscare;
+                inCamera = false;
+                animationController = new(felix.deathAnimation, 0.25f);
+            }
            
             foreach (Animatronic animatronic in allAnimatronics) // Checks if palyer is in camra and a animatronic is outside office
             {
@@ -68,7 +77,7 @@ public class GameManager
                 {
                     inNightState = InNightState.jumpscare;
                     inCamera = false;
-                    animationController = new(animatronic.deathAnimation);
+                    animationController = new(animatronic.deathAnimation, 3);
                 }
             }
 

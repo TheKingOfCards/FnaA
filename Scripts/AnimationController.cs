@@ -6,15 +6,20 @@ public class AnimationController
 {
     //* Make every frame as big as the screen and create them at (0, 0)
     int _currentFrameCount = -1;
-    readonly float _timeBetweenFrames = 3;
+    readonly float _timeBetweenFrames;
     float _timer;
     Texture2D _currentFrame;
     public bool animationDone = false;
+    bool soundPlayed = false;
     List<Texture2D> _animation;
 
+    Sound _jumpscareSound = Raylib.LoadSound(@"Sounds\JumpscareSound.mp3");
 
-    public AnimationController(List<Texture2D> animation)
+
+    public AnimationController(List<Texture2D> animation, float timerMax)
     {
+        _timeBetweenFrames = timerMax;
+
         _timer = _timeBetweenFrames;
         _animation = animation;
     }
@@ -29,7 +34,6 @@ public class AnimationController
             if (_currentFrameCount >= _animation.Count)
             {
                 animationDone = true;
-                _currentFrameCount = 0;
             }
         }
         else
@@ -37,8 +41,17 @@ public class AnimationController
             _timer += GameFunctions.GetdeltaTime();
         }
 
-        _currentFrame = _animation[_currentFrameCount];
-        Raylib.DrawTexture(_currentFrame, 0, 0, Color.WHITE);
+        if (!animationDone)
+        {
+            if (!soundPlayed)
+            {
+                Raylib.PlaySound(_jumpscareSound);
+                soundPlayed = true;
+            }
+
+            _currentFrame = _animation[_currentFrameCount];
+            Raylib.DrawTexture(_currentFrame, 0, 0, Color.WHITE);
+        }
     }
 
 
