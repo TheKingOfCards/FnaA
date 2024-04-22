@@ -8,10 +8,11 @@ Raylib.InitWindow(1920, 1050, "FnaF");
 GameManager gM = new();
 
 Textures.LoadTextures();
+AnimatronicTextures.LoadTexture();
 
 while (!Raylib.WindowShouldClose())
 {
-    gM.Update();
+	gM.Update();
 }
 
 /* The map that the animatronics use to move

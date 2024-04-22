@@ -3,7 +3,7 @@
 namespace FnaF;
 
 public class DrawAnimatronicCamera
-{
+{ // * Draws animatronic depending on animatronic position and the current camera the player is using 
     public static void DrawAnimantronicOnCamera(string currentCamera, Dictionary<string, Texture2D> animatronicTextures, int currentPos)
     {
         if(currentPos == 8 && currentCamera == "StartRoom")

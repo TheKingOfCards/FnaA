@@ -9,8 +9,6 @@ public class Button
     Action clickAction;
     Rectangle rect;
 
-    Vector2 mousePos;
-
 
     public Button(Rectangle rectangle, Action hoverAct, Action clickAct)
     {
@@ -19,10 +17,8 @@ public class Button
         clickAction = clickAct;
     }
 
-    public void Update(Vector2 mP)
+    public void Update()
     {
-        mousePos = mP;
-
         if (CheckOverlap())
         {
             hoverAction();
@@ -43,6 +39,6 @@ public class Button
 
     bool CheckOverlap()
     {
-        return Raylib.CheckCollisionPointRec(mousePos, rect);
+        return Raylib.CheckCollisionPointRec(GameFunctions.GetMousePos(), rect);
     }
 }

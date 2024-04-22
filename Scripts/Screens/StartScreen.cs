@@ -19,7 +19,7 @@ public class StartScreen : Screens
     {
         _mousePos = GameFunctions.GetMousePos();
 
-        _buttons.ForEach(b => b.Update(_mousePos));
+        _buttons.ForEach(b => b.Update());
 
         Draw();
     }

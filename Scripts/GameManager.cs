@@ -53,14 +53,15 @@ public class GameManager
         {
             night.Update();
             allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
-            cameraBar.Update(GameFunctions.GetMousePos());
+            cameraBar.Update();
             felix.Update(cameraLogic.currentCamera, inCamera);
-
+            
+            // Sets night state if player is in camera or not
             if (inCamera) inNightState = InNightState.inCamera;
             else if (!inCamera && inNightState != InNightState.jumpscare) inNightState = InNightState.inOffice;
 
             NightStateMachine();
-            //! This dosent work -- fix first (animation plays wrong) death screen does not show
+           
             foreach (Animatronic animatronic in allAnimatronics) // Checks if palyer is in camra and a animatronic is outside office
             {
                 if (animatronic.currentPosition == 0 && inNightState == InNightState.inCamera)
@@ -137,7 +138,7 @@ public class GameManager
         cameraLogic = new();
 
         allAnimatronics.Clear();
-        allAnimatronics.Add(new Henry(20, 4));
+        allAnimatronics.Add(new Henry(1, 4));
 
         night = new Night(currentNight);
     }
@@ -149,7 +150,7 @@ public class GameManager
         if (gameState == GameState.inNight)
         {
             night.Draw();
-
+            
             if (inNightState == InNightState.jumpscare)
             {
                 animationController.PlayAnimation();
@@ -159,12 +160,13 @@ public class GameManager
             {
                 cameraLogic.Draw();
                 felix.Draw();
+                // Draws animatronic position
                 foreach (Animatronic animatronic in allAnimatronics)
                 {
                     DrawAnimatronicCamera.DrawAnimantronicOnCamera(cameraLogic.currentCamera, animatronic.cameraImg, animatronic.currentPosition);
                 }
             }
-            
+
             if (inNightState == InNightState.inOffice)
             {
                 Raylib.DrawTexture(Textures.cameraBar, 130, 830, Color.RED);

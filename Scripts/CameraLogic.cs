@@ -8,15 +8,19 @@ public class CameraLogic
     Texture2D cameraMap = Raylib.LoadTexture(@"CameraTextures\CAM-Map.png");
     float deltaTime;
 
-    //Felix camera variabels
+    // Felix camera variabels
     float timerMax = 0.5f;
     float timer;
     int changeImgMax = 100;
     Texture2D latestFelixFrame;
 
+    // Felix image variables
+    Texture2D felixImage;
+
     readonly Random random = new();
 
     List<Button> buttons = new();
+
 
 
     public CameraLogic()
@@ -43,8 +47,6 @@ public class CameraLogic
         buttons.Add(new Button(new Rectangle(223, 882, 80, 50), () => { }, () => currentCamera = "OfficeL"));
         //Cam 9
         buttons.Add(new Button(new Rectangle(348, 882, 80, 50), () => { }, () => currentCamera = "OfficeR"));
-
-        // LoadCameraTextures();
     }
 
 
@@ -52,9 +54,27 @@ public class CameraLogic
     {
         deltaTime = GameFunctions.GetdeltaTime();
 
-        buttons.ForEach(b => b.Update(GameFunctions.GetMousePos()));
+        buttons.ForEach(b => b.Update());
 
         Draw();
+    }
+
+
+    static Image TintImage(int tintStrength)
+    {
+        Image image;
+        if(GameFunctions.CheckRandom(0, 101, 5))
+        {
+            image = Raylib.LoadImage(@"AnimatronicImg\Felix2.png");
+        }
+        else
+        {
+            image = Raylib.LoadImage(@"AnimatronicImg\Felix1.png");
+        }
+
+        Raylib.ImageColorTint(ref image, new(tintStrength, tintStrength, tintStrength, 255));
+
+        return image;
     }
 
 
@@ -62,8 +82,6 @@ public class CameraLogic
     {
         if (currentCamera == "Felix")
         {
-            // Raylib.DrawRectangle(1600, 450, 180, 180, Color.WHITE);
-
             if (timer >= timerMax)
             {
                 timer = 0;
@@ -71,18 +89,21 @@ public class CameraLogic
                 if (GameFunctions.CheckRandom(0, changeImgMax + 1, changeImgMax / 2))
                 {
                     latestFelixFrame = Textures.cameraTextures["FelixDark"];
+                    felixImage = Raylib.LoadTextureFromImage(TintImage(100));
                 }
                 else
                 {
                     latestFelixFrame = Textures.cameraTextures["FelixLight"];
+                    felixImage = Raylib.LoadTextureFromImage(TintImage(150));
                 }
             }
             else
             {
                 timer += deltaTime;
             }
-
+            
             Raylib.DrawTexture(latestFelixFrame, 0, 0, Color.WHITE);
+            Raylib.DrawTexture(felixImage, 800, 200, Color.WHITE);
         }
         else
         {

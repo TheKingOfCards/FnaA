@@ -17,6 +17,8 @@ public static class Textures
     public static Texture2D percent;
     //Office textures end
 
+    
+
     public static List<Texture2D> numbers;
 
     public static void LoadTextures()
