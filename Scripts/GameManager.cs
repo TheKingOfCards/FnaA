@@ -5,14 +5,19 @@ using Raylib_cs;
 
 public class GameManager
 {
-    int currentNight = 1;
-    int nightDoneTime = 6;
+    int _currentNight = 1;
+    readonly int _nightDoneTime = 6;
     bool inCamera;
 
-    Night night;
-    CameraLogic cameraLogic;
+    List<LogicClass> logicClasses = new()
+    {
 
-    Felix felix = new();
+    };
+
+    Felix _felix = new();
+
+    // ! Test (REMOVE WHEN DONE)
+    Texture2D leoTest = Raylib.LoadTexture(@"AnimatronicImg\LeoOfficeLeft1.png");
 
 
     StartScreen startScreen = new();
@@ -29,14 +34,17 @@ public class GameManager
 
     Button cameraBar;
 
-    // TODO Draw animatronics in camera - take player currenct camera and animatronic posistion draw
+    // TODO | Wont exit camera during jumpscare
+    // TODO | Change phone logic to this class, make it it's on class first 
     public GameManager()
     {
+        logicClasses.Add(new Office());
+        logicClasses.Add(new Night());
+        logicClasses.Add(new CameraLogic());
+
         allAnimatronics.Add(new Henry(20, 3));
 
         cameraBar = new Button(new Rectangle(1920 / 2 + 30, 830, 750, 150), () => { }, () => inCamera = !inCamera);
-
-        Console.WriteLine(allAnimatronics[0].currentPosition);
     }
 
     public void Update()
@@ -51,27 +59,27 @@ public class GameManager
     {
         if (gameState == GameState.inNight)
         {
-            night.Update();
-            allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
+            logicClasses.ForEach(logicClasses => logicClasses.Update());
+            // _night.Update();
+            // _office.Update();
             cameraBar.Update();
-            felix.Update(cameraLogic.currentCamera, inCamera);
-            
+            allAnimatronics.ForEach(a => a.Update()); // Updates all animatronics
+            _felix.Update(logicClasses.OfType<CameraLogic>().FirstOrDefault().currentCamera, inCamera);
+
             // Sets night state if player is in camera or not
             if (inCamera) inNightState = InNightState.inCamera;
             else if (!inCamera && inNightState != InNightState.jumpscare) inNightState = InNightState.inOffice;
 
             NightStateMachine();
 
-            // ! TEST
-            if(felix._timer <= 0 && inNightState != InNightState.jumpscare)
+            if (_felix._timer <= 0 && inNightState != InNightState.jumpscare) // Checks if Felixs timer is 0 and jumpscares 
             {
-                Console.WriteLine("JumpS");
                 inNightState = InNightState.jumpscare;
                 inCamera = false;
-                animationController = new(felix.deathAnimation, 0.25f);
+                animationController = new(_felix.deathAnimation, 0.25f);
             }
-           
-            foreach (Animatronic animatronic in allAnimatronics) // Checks if palyer is in camra and a animatronic is outside office
+
+            foreach (Animatronic animatronic in allAnimatronics) // Checks if palyer is in camera and a animatronic is outside office
             {
                 if (animatronic.currentPosition == 0 && inNightState == InNightState.inCamera)
                 {
@@ -81,12 +89,12 @@ public class GameManager
                 }
             }
 
-            if (night.currentTime == nightDoneTime) //Checks if player has completed the night
+            if (logicClasses.OfType<Night>().FirstOrDefault().currentTime == _nightDoneTime) // Checks if player has completed the night
             {
-                night.currentTime = 0;
+                logicClasses.OfType<Night>().FirstOrDefault().currentTime = 0;
                 nightDoneScreen = new NightDoneScreen();
                 gameState = GameState.inNightDoneScreen;
-                currentNight++;
+                _currentNight++;
             }
         }
         else if (gameState == GameState.inStartScreen)
@@ -133,23 +141,21 @@ public class GameManager
                 deathScreen = new();
             }
         }
-
-        if (inNightState == InNightState.inCamera) // If player is in camera
-        {
-            cameraLogic.Update();
-        }
     }
 
 
     void StartNewNight()
     {
-        night = new(currentNight);
-        cameraLogic = new();
+        logicClasses.Add(new Office());
+        logicClasses.Add(new Night());
+        logicClasses.Add(new CameraLogic());
+
+        _felix = new();
+        gameState = GameState.inNight;
+        inNightState = InNightState.inOffice;
 
         allAnimatronics.Clear();
         allAnimatronics.Add(new Henry(1, 4));
-
-        night = new Night(currentNight);
     }
 
     public void DrawGame()
@@ -158,27 +164,40 @@ public class GameManager
 
         if (gameState == GameState.inNight)
         {
-            night.Draw();
-            
-            if (inNightState == InNightState.jumpscare)
+            foreach (LogicClass logicClass in logicClasses)
             {
-                animationController.PlayAnimation();
+                if (logicClass is CameraLogic cameraLogic && inNightState == InNightState.inCamera)
+                {
+                    cameraLogic.Draw();
+
+                    _felix.Draw();
+                    // Draws animatronic position
+                    foreach (Animatronic animatronic in allAnimatronics)
+                    {
+                        DrawAnimatronicCamera.DrawAnimantronicOnCamera(logicClasses.OfType<CameraLogic>().FirstOrDefault().currentCamera, animatronic.cameraImg, animatronic.currentPosition);
+                    }
+                }
+                else if (logicClass is Night night && inNightState == InNightState.inOffice)
+                {
+                    night.Draw();
+                }
+                else if (logicClass is Office office && inNightState == InNightState.inOffice)
+                {
+                    office.Draw();
+                }
             }
 
-            if (inNightState == InNightState.inCamera)
+            if (inNightState == InNightState.jumpscare && !animationController.animationDone)
             {
-                cameraLogic.Draw();
-                felix.Draw();
-                // Draws animatronic position
-                foreach (Animatronic animatronic in allAnimatronics)
-                {
-                    DrawAnimatronicCamera.DrawAnimantronicOnCamera(cameraLogic.currentCamera, animatronic.cameraImg, animatronic.currentPosition);
-                }
+                logicClasses.OfType<Office>().FirstOrDefault()?.Draw();
+                animationController.PlayAnimation();
             }
 
             if (inNightState == InNightState.inOffice)
             {
                 Raylib.DrawTexture(Textures.cameraBar, 130, 830, Color.RED);
+
+                if (logicClasses.OfType<Office>().FirstOrDefault().leftLightOn) { Raylib.DrawTexture(leoTest, 0, 0, Color.WHITE); }
             }
 
             // For textures that need to be drawn in bot camera and office 

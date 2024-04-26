@@ -2,7 +2,7 @@ using System.Numerics;
 using FnaF;
 using Raylib_cs;
 
-public class CameraLogic
+public class CameraLogic : LogicClass
 {
     public string currentCamera;
     Texture2D cameraMap = Raylib.LoadTexture(@"CameraTextures\CAM-Map.png");
@@ -50,7 +50,7 @@ public class CameraLogic
     }
 
 
-    public void Update()
+    public override void Update()
     {
         deltaTime = GameFunctions.GetdeltaTime();
 
@@ -78,7 +78,7 @@ public class CameraLogic
     }
 
 
-    public void Draw()
+    public override void Draw()
     {
         if (currentCamera == "Felix")
         {

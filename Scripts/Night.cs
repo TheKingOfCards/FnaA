@@ -3,7 +3,7 @@ using System.Reflection.Metadata;
 using FnaF;
 using Raylib_cs;
 
-public class Night
+public class Night : LogicClass
 {
     //General varibels
     Player player = new();
@@ -19,15 +19,11 @@ public class Night
     //Time variabels
     public int currentTime = 1;
     float timeTimer;
-    float changeHour = 20;
-
-    Office office;
+    readonly float changeHour = 20;
 
 
-    public Night(int cN)
+    public Night()
     {
-        office = new Office();
-
         LoadNumberTextures();
     }
 
@@ -46,25 +42,19 @@ public class Night
     }
 
 
-    public void Update()
+    public override void Update()
     {
         deltaTime = GameFunctions.GetdeltaTime();
 
         player.Update();
 
-        office.Update();
-
         TimeLogic(); 
     }
 
 
-    public void Draw()
+    public override void Draw()
     {
-        office.Draw();
-
         player.Draw();
-
-        office.DrawUI();
 
         DrawUI();
     }

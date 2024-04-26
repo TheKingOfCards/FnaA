@@ -3,17 +3,14 @@
 using System.Numerics;
 using Raylib_cs;
 
-public class Office
+public class Office : LogicClass
 {
     float deltaTime;
     public bool usingPhone = false;
 
-    //Office state bools
-    bool inCamera = false;
-
     bool doorClosed = false;
-    bool rightLightOn = false;
-    bool leftLightOn = false;
+    public bool rightLightOn = false;
+    public bool leftLightOn = false;
     bool stateChange = false;
     public List<bool> stateBools = new() // [0] == Door [1] == LightR [2] == LightL [3] == MonitorUp
     {
@@ -56,7 +53,7 @@ public class Office
     }
 
 
-    public void Update()
+    public override void Update()
     {
         deltaTime = GameFunctions.GetdeltaTime();
         mousePos = GameFunctions.GetMousePos();
@@ -66,7 +63,7 @@ public class Office
     }
 
 
-    public void Draw()
+    public override void Draw()
     {
         if (doorClosed)
         {
@@ -86,10 +83,12 @@ public class Office
         {
             Raylib.DrawTexture(Textures.leftBlackout, 625, 294, Color.WHITE);
         }
+
+        DrawUI();
     }
 
 
-    public void DrawUI() //Draws power UI
+    void DrawUI() //Draws power UI
     {
         Raylib.DrawTexture(Textures.numbers[firstNumb], 1750, 70, Color.WHITE);
         Raylib.DrawTexture(Textures.numbers[secoundNumb], 1790, 70, Color.WHITE);
